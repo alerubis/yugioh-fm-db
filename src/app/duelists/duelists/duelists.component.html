@@ -1,0 +1,21 @@
+<app-breadcrumb [section]="'APPS'" [items]="[
+    { text: 'Duelists', route: ['..'], icon: 'style' },
+]"
+></app-breadcrumb>
+
+<div class="flex flex-col max-w-7xl mx-auto p-6 pb-0">
+
+    <div class="flex flex-col gap-2">
+
+        @for (duelist of duelists; track $index) {
+            <a class="flex flex-row items-center gap-2" [routerLink]="[duelist.DuelistId]">
+                <img [src]="duelist.getDuelitsSrc()" [alt]="duelist.DuelistId">
+                <div>
+                    {{ duelist.Duelist }}
+                </div>
+            </a>
+        }
+
+    </div>
+
+</div>

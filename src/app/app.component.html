@@ -1,1 +1,49 @@
-asd
+<mat-sidenav-container class="h-screen">
+
+    <mat-sidenav #sidenav class="!bg-slate-800 max-w-xs border-r !border-gray-700" [ngClass]="mobileQuery.matches ? '!w-[calc(100%-4rem)]' : '!w-64'" [mode]="mobileQuery.matches ? 'over' : 'side'" [opened]="!mobileQuery.matches">
+        <div class="flex flex-col">
+
+            <div class="flex flex-row items-center justify-between text-white p-6 pb-0 pr-3">
+                <div class="text-2xl">
+                    Menu
+                </div>
+                <button mat-icon-button (click)="sidenav.toggle()" [ngClass]="mobileQuery.matches ? '' : '!hidden'">
+                    <mat-icon class="text-white">arrow_back</mat-icon>
+                </button>
+            </div>
+
+            <div class="flex flex-col gap-8 flex-auto px-6 py-8">
+                @for (group of navigation; track $index) {
+                    <div class="flex flex-col gap-3">
+                        <div class="text-slate-400 text-sm border-t border-slate-600 pt-1">
+                            {{ group.title }}
+                        </div>
+                        @for (item of group.items; track $index) {
+                            <a class="nav-item" [routerLink]="item.url" [routerLinkActive]="['active']">
+                                <div class="title">{{ item.title }}</div>
+                            </a>
+                        }
+                    </div>
+                }
+            </div>
+
+        </div>
+    </mat-sidenav>
+
+    <mat-sidenav-content>
+        <div class="flex flex-col w-full h-full">
+            <div class="flex flex-row items-center justify-between h-14 min-h-14 border-b px-4">
+                <button mat-icon-button (click)="sidenav.toggle()">
+                    <mat-icon>menu</mat-icon>
+                </button>
+                <button mat-icon-button>
+                    <mat-icon>person</mat-icon>
+                </button>
+            </div>
+            <div class="flex-1 bg-gray-100">
+                <router-outlet></router-outlet>
+            </div>
+        </div>
+    </mat-sidenav-content>
+
+</mat-sidenav-container>

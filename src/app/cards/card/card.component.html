@@ -1,0 +1,138 @@
+<app-breadcrumb [section]="'APPS'" [items]="[
+    { text: 'Cards', route: ['..'], icon: 'style' },
+    { text: card?.CardId + ' - ' + card?.CardName, route: [] },
+]"
+></app-breadcrumb>
+
+<!-- #region Header -->
+<div class="flex flex-row items-center gap-3 px-3 sm:px-6 py-4 bg-white border-b">
+
+    <button mat-icon-button matTooltip="Back to people list" [routerLink]="['..']">
+        <mat-icon>arrow_back</mat-icon>
+    </button>
+
+    @if (card) {
+        <div class="flex flex-row items-center gap-4">
+            <img [src]="card.getArtworkSrc()" [alt]="card.CardId" class="w-12 h-12 rounded border">
+            <div class="flex flex-col">
+                <div class="text-2xl">
+                    {{ card.CardId }} - {{ card.CardName }}
+                </div>
+                <div class="text-sm">
+                    {{ card.Description }}
+                </div>
+            </div>
+        </div>
+    } @else {
+        <app-message-box class="w-full" [type]="'error'" [message]="'Card not found'"></app-message-box>
+    }
+
+</div>
+<!-- #endregion -->
+
+@if (card) {
+    <div class="flex flex-col p-6">
+
+        <div class="flex flex-row gap-6">
+
+            <div class="relative flex flex-col gap-6 p-6 bg-white border rounded-xl w-full sm:w-1/3">
+
+                <div class="mx-auto">
+                    <img [src]="card.getImageSrc()" [alt]="card.CardId">
+                </div>
+
+                <div class="flex flex-col divide-y">
+
+                    <div class="flex flex-row items-center justify-between gap-6 py-2">
+                        <div class="text-slate-500">CardId</div>
+                        <div>{{ card.CardId }}</div>
+                    </div>
+                    <div class="flex flex-row items-center justify-between gap-6 py-2">
+                        <div class="text-slate-500">CardName</div>
+                        <div>{{ card.CardName }}</div>
+                    </div>
+                    <div class="flex flex-row items-center justify-between gap-6 py-2">
+                        <div class="text-slate-500">GuardianStar1</div>
+                        <div>{{ card.GuardianStar1 }}</div>
+                    </div>
+                    <div class="flex flex-row items-center justify-between gap-6 py-2">
+                        <div class="text-slate-500">GuardianStar2</div>
+                        <div>{{ card.GuardianStar2 }}</div>
+                    </div>
+                    <div class="flex flex-row items-center justify-between gap-6 py-2">
+                        <div class="text-slate-500">Level</div>
+                        <div>{{ card.Level }}</div>
+                    </div>
+                    <div class="flex flex-row items-center justify-between gap-6 py-2">
+                        <div class="text-slate-500">Type</div>
+                        <div>{{ card.Type }}</div>
+                    </div>
+                    <div class="flex flex-row items-center justify-between gap-6 py-2">
+                        <div class="text-slate-500">Attack</div>
+                        <div>{{ card.Attack }}</div>
+                    </div>
+                    <div class="flex flex-row items-center justify-between gap-6 py-2">
+                        <div class="text-slate-500">Defense</div>
+                        <div>{{ card.Defense }}</div>
+                    </div>
+                    <div class="flex flex-row items-center justify-between gap-6 py-2">
+                        <div class="text-slate-500">Attribute</div>
+                        <div>{{ card.Attribute }}</div>
+                    </div>
+                    <div class="flex flex-row items-center justify-between gap-6 py-2">
+                        <div class="text-slate-500">Password</div>
+                        <div>{{ card.Password }}</div>
+                    </div>
+                    <div class="flex flex-row items-center justify-between gap-6 py-2">
+                        <div class="text-slate-500">StarchipCost</div>
+                        <div>{{ card.StarchipCost }}</div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="relative flex flex-col gap-6 p-6 bg-white border rounded-xl w-full sm:w-1/3">
+
+                <div class="mx-auto">
+                    DROPS
+                </div>
+
+                <div class="flex flex-col divide-y">
+
+                    @for (drop of drops; track $index) {
+                        <div class="flex flex-row items-center justify-between gap-6 py-2">
+                            <img [src]="drop.duelist?.getDuelitsSrc()" [alt]="drop.DuelistId">
+                            <div>{{ drop.PoolType }}</div>
+                            <div>{{ drop.CardProbability }}</div>
+                            <div>{{ (drop.CardProbability / 2048 * 100) | number : '1.2-2' }}%</div>
+                        </div>
+                    }
+
+                </div>
+
+            </div>
+
+            <div class="relative flex flex-col gap-6 p-6 bg-white border rounded-xl w-full sm:w-1/3">
+
+                <div class="mx-auto">
+                    EQUIPS
+                </div>
+
+                <div class="flex flex-col divide-y">
+
+                    @for (equipInfo of equipInfos; track $index) {
+                        <div class="flex flex-row items-center justify-between gap-6 py-2">
+                            <img [src]="equipInfo.equipCard?.getArtworkSrc()" [alt]="equipInfo.EquipId" class="w-12 h-12">
+                            <div>{{ equipInfo.equipCard?.CardName }}</div>
+                        </div>
+                    }
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+}

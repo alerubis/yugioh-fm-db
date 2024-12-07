@@ -1,0 +1,62 @@
+<app-breadcrumb [section]="'APPS'" [items]="[
+    { text: 'Duelists', route: ['..'], icon: 'style' },
+    { text: duelist?.DuelistId + ' - ' + duelist?.Duelist, route: [] },
+]"
+></app-breadcrumb>
+
+<!-- #region Header -->
+<div class="flex flex-row items-center gap-3 px-3 sm:px-6 py-4 bg-white border-b">
+
+    <button mat-icon-button matTooltip="Back to people list" [routerLink]="['..']">
+        <mat-icon>arrow_back</mat-icon>
+    </button>
+
+    @if (duelist) {
+        <div class="flex flex-row items-center gap-4">
+            <img [src]="duelist.getDuelitsSrc()" [alt]="duelist.DuelistId" class="w-12 h-12 rounded border">
+            <div class="flex flex-col">
+                <div class="text-2xl">
+                    {{ duelist.DuelistId }} - {{ duelist.Duelist }}
+                </div>
+                <div class="text-sm">
+                    {{ duelist.HandSize }}
+                </div>
+            </div>
+        </div>
+    } @else {
+        <app-message-box class="w-full" [type]="'error'" [message]="'Duelist not found'"></app-message-box>
+    }
+
+</div>
+<!-- #endregion -->
+
+@if (duelist) {
+    <div class="flex flex-col p-6">
+
+        <div class="flex flex-row gap-6">
+
+            <div class="relative flex flex-col gap-6 p-6 bg-white border rounded-xl w-full sm:w-1/3">
+
+                <div class="mx-auto">
+                    <img [src]="duelist.getDuelitsSrc()" [alt]="duelist.DuelistId">
+                </div>
+
+                <div class="flex flex-col divide-y">
+
+                    <div class="flex flex-row items-center justify-between gap-6 py-2">
+                        <div class="text-slate-500">DuelistId</div>
+                        <div>{{ duelist.DuelistId }}</div>
+                    </div>
+                    <div class="flex flex-row items-center justify-between gap-6 py-2">
+                        <div class="text-slate-500">Duelist</div>
+                        <div>{{ duelist.Duelist }}</div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+}

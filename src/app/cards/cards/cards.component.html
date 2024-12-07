@@ -1,0 +1,35 @@
+<app-breadcrumb [section]="'APPS'" [items]="[
+    { text: 'Cards', route: ['..'], icon: 'style' },
+]"
+></app-breadcrumb>
+
+<div class="flex flex-col max-w-7xl mx-auto p-6 pb-0">
+
+    <ul>
+        <li>Filtro mostra solo ottenibili</li>
+        <li>Filtro mostra solo ingrigibili</li>
+        <li>Filtro per nome</li>
+        <li>Contatore in alto (parte a 722/722) man mano che filtri diminuisce</li>
+        <li>Sort by atk/def/tipo ecc</li>
+    </ul>
+
+    <div class="grid grid-cols-2 gap-6">
+
+        @for (chunk of getCardsChunks(); track $index) {
+            <div class="flex flex-col">
+                <div>
+                    {{ $index * 100 + 1 }} - {{ $index * 100 + chunk.length }}
+                </div>
+                <div class="grid grid-cols-10 content-start gap-1">
+                    @for (card of chunk; track $index) {
+                        <a class="cursor-pointer hover:scale-125 transition-all" (click)="selectedCard = card" [routerLink]="[card.CardId]">
+                            <img [src]="card.getImageSrc()" [alt]="card.CardId">
+                        </a>
+                    }
+                </div>
+            </div>
+        }
+
+    </div>
+
+</div>

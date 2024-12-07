@@ -1,0 +1,12 @@
+<div class="flex flex-row items-center gap-3 border rounded p-3" [ngClass]="getBgClass() + ' ' + getBorderClass()">
+    <mat-icon class="w-6 min-w-6" [ngClass]="getTextClass()">
+        @if (type === 'info') {
+            info
+        } @else if (type === 'warning') {
+            error_outline
+        } @else if (type === 'error') {
+            error_outline
+        }
+    </mat-icon>
+    <div class="text-sm" [ngClass]="getTextClass()" [innerHTML]="message"></div>
+</div>

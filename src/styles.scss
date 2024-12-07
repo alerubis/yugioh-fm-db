@@ -21,3 +21,27 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+a {
+  @apply hover:underline;
+}
+
+// Fix tailwind form field outline
+// https://github.com/tailwindlabs/tailwindcss/discussions/9993
+.mdc-notched-outline__notch {
+  border-right: none !important;
+}
+
+.mat-mdc-dialog-surface {
+  overflow: hidden !important;
+
+  .dialog-content {
+      max-height: calc(100vh - 64px - 64px);
+      overflow: auto;
+      @apply flex flex-col p-4 sm:p-6;
+  }
+
+  .dialog-actions {
+      @apply flex flex-row items-center justify-end gap-4 p-4 sm:p-6;
+  }
+}

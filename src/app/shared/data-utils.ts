@@ -34,6 +34,7 @@ export class DataUtils {
         const drops: Drop[] = dropsData.map(x => new Drop(x));
         for (const drop of drops) {
             drop.duelist = this.getDuelistFromId(drop.DuelistId);
+            drop.card = this.getCardFromId(drop.CardId);
         }
         return drops;
     }
@@ -48,16 +49,32 @@ export class DataUtils {
         return drops;
     }
 
+    static getDropsForDuelist(DuelistId: number | string | null): Drop[] {
+        const drops = this.getDrops().filter(x => x.DuelistId == DuelistId).filter(x => x.PoolType !== 'Deck');
+        return drops;
+    }
+
+    static getDecksForDuelist(DuelistId: number | string | null): Drop[] {
+        const drops = this.getDrops().filter(x => x.DuelistId == DuelistId).filter(x => x.PoolType === 'Deck');
+        return drops;
+    }
+
     static getEquipInfos(): EquipInfo[] {
         const equipinfos: EquipInfo[] = equipinfoData.map(x => new EquipInfo(x));
         for (const equipinfo of equipinfos) {
-            equipinfo.equipCard = this.getCardFromId(equipinfo.EquipId);
+            equipinfo.equip = this.getCardFromId(equipinfo.EquipId);
+            equipinfo.card = this.getCardFromId(equipinfo.CardId);
         }
         return equipinfos;
     }
 
     static getEquipInfosForCard(CardId: number | string | null): EquipInfo[] {
         const equipinfos = this.getEquipInfos().filter(x => x.CardId == CardId);
+        return equipinfos;
+    }
+
+    static getEquipInfosForCardInverse(EquipId: number | string | null): EquipInfo[] {
+        const equipinfos = this.getEquipInfos().filter(x => x.EquipId == EquipId);
         return equipinfos;
     }
 

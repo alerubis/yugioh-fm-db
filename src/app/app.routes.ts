@@ -8,7 +8,7 @@ export const routes: Routes = [
         loadChildren: () => import('./cards/cards.routes').then(m => m.routes),
     },
     {
-        path: 'duelist',
+        path: 'duelists',
         loadChildren: () => import('./duelists/duelists.routes').then(m => m.routes),
     },
     {

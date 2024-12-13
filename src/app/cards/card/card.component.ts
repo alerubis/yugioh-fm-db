@@ -1,25 +1,24 @@
+import { DecimalPipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { MatIcon } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, ParamMap, RouterLink } from '@angular/router';
-import { MessageBoxComponent } from '../../shared/components/message-box/message-box.component';
+import { BreadcrumbComponent } from '../../shared/components/breadcrumb/breadcrumb.component';
 import { DataUtils } from '../../shared/data-utils';
 import { Card, Drop, EquipInfo } from '../../shared/types';
-import { BreadcrumbComponent } from '../../shared/components/breadcrumb/breadcrumb.component';
-import { MatIconButton } from '@angular/material/button';
-import { DecimalPipe } from '@angular/common';
 
 @Component({
     selector: 'app-card',
     standalone: true,
     imports: [
         RouterLink,
-        MatIcon,
-        MatIconButton,
-        BreadcrumbComponent,
-        MessageBoxComponent,
-        DecimalPipe
+        MatButtonModule,
+        MatIconModule,
+        DecimalPipe,
+        BreadcrumbComponent
     ],
-    templateUrl: './card.component.html'
+    templateUrl: './card.component.html',
 })
 export class CardComponent implements OnInit {
 
@@ -27,19 +26,23 @@ export class CardComponent implements OnInit {
     drops: Drop[] = [];
     opponentsDecks: Drop[] = [];
     equipInfos: EquipInfo[] = [];
+    equipInfosInverse: EquipInfo[] = [];
 
     constructor(
         private _activatedRoute: ActivatedRoute,
+        private titleService: Title,
     ) {
-
+        this.titleService.setTitle('? - Cards - Yu-Gi-Oh! Forbidden Memories Database');
     }
 
     ngOnInit(): void {
         this._activatedRoute.paramMap.subscribe((params: ParamMap) => {
             this.card = DataUtils.getCardFromId(params.get('id'));
+            this.titleService.setTitle((this.card?.getFullName() || '?') + ' - Cards - Yu-Gi-Oh! Forbidden Memories Database');
             this.drops = DataUtils.getDropsForCard(params.get('id'));
-            this.opponentsDecks = DataUtils.getDropsForCard(params.get('id'));
+            this.opponentsDecks = DataUtils.getOpponentsDecksForCard(params.get('id'));
             this.equipInfos = DataUtils.getEquipInfosForCard(params.get('id'));
+            this.equipInfosInverse = DataUtils.getEquipInfosForCardInverse(params.get('id'));
         });
     }
 

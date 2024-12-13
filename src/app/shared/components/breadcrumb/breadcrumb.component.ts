@@ -1,5 +1,6 @@
+import { NgClass } from '@angular/common';
 import { Component, Input } from '@angular/core';
-import { MatIconModule } from '@angular/material/icon';
+import { MatIcon } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
 
 export interface BreadcrumbItem {
@@ -14,8 +15,9 @@ export interface BreadcrumbItem {
     templateUrl: './breadcrumb.component.html',
     standalone: true,
     imports: [
-        MatIconModule,
+        MatIcon,
         RouterLink,
+        NgClass,
     ]
 })
 export class BreadcrumbComponent {

@@ -1,10 +1,11 @@
 import { MediaMatcher } from '@angular/cdk/layout';
 import { NgClass } from '@angular/common';
-import { ChangeDetectorRef, Component } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatSidenavModule } from '@angular/material/sidenav';
-import { RouterModule } from '@angular/router';
+import { MatSidenavContent, MatSidenavModule } from '@angular/material/sidenav';
+import { MatToolbar } from '@angular/material/toolbar';
+import { NavigationEnd, Router, RouterModule } from '@angular/router';
 
 export interface NavigationGroup {
     title: string;
@@ -23,13 +24,15 @@ export interface NavigationItem {
         MatButtonModule,
         MatIconModule,
         MatSidenavModule,
+        MatToolbar,
         RouterModule,
         NgClass,
     ],
     templateUrl: './app.component.html',
-    styleUrl: './app.component.scss',
 })
-export class AppComponent {
+export class AppComponent implements OnInit, OnDestroy {
+
+    @ViewChild(MatSidenavContent) sidenavContent!: MatSidenavContent;
 
     mobileQuery: MediaQueryList;
 
@@ -38,10 +41,19 @@ export class AppComponent {
     constructor(
         private _changeDetectorRef: ChangeDetectorRef,
         private _media: MediaMatcher,
+        private _router: Router,
     ) {
         this.mobileQuery = this._media.matchMedia('(max-width: 639px)');
         this._mobileQueryListener = () => this._changeDetectorRef.detectChanges();
         this.mobileQuery.addEventListener('change', this._mobileQueryListener);
+    }
+
+    ngOnInit(): void {
+        this._router.events.subscribe(event => {
+            if (event instanceof NavigationEnd) {
+                this.sidenavContent.scrollTo({ top: 0, behavior: 'instant' });
+            }
+        });
     }
 
     ngOnDestroy(): void {
@@ -50,7 +62,7 @@ export class AppComponent {
 
     navigation: NavigationGroup[] = [
         {
-            title: 'Apps',
+            title: 'Database',
             items: [
                 {
                     title: 'Home',
@@ -64,8 +76,23 @@ export class AppComponent {
                 },
                 {
                     title: 'Duelists',
-                    icon: 'style',
-                    url: 'duelist'
+                    icon: 'people',
+                    url: 'duelists'
+                }
+            ]
+        },
+        {
+            title: 'Tools',
+            items: [
+                {
+                    title: 'Initial deck simulator',
+                    icon: 'home',
+                    url: 'initial-deck-simulator'
+                },
+                {
+                    title: 'Duelist deck simulator',
+                    icon: 'home',
+                    url: 'duelist-deck-simulator'
                 }
             ]
         },

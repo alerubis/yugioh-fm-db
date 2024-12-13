@@ -1,34 +1,71 @@
-<app-breadcrumb [section]="'APPS'" [items]="[
-    { text: 'Cards', route: ['..'], icon: 'style' },
-]"
-></app-breadcrumb>
+<div class="flex flex-col pb-6">
 
-<div class="flex flex-col max-w-7xl mx-auto p-6 pb-0">
+    <app-breadcrumb [section]="'Database'" [items]="[
+        { text: 'Cards', route: [], icon: 'style' }
+    ]"
+    ></app-breadcrumb>
 
-    <ul>
-        <li>Filtro mostra solo ottenibili</li>
-        <li>Filtro mostra solo ingrigibili</li>
-        <li>Filtro per nome</li>
-        <li>Contatore in alto (parte a 722/722) man mano che filtri diminuisce</li>
-        <li>Sort by atk/def/tipo ecc</li>
-    </ul>
+    <div class="bg-card w-full">
 
-    <div class="grid grid-cols-2 gap-6">
+        <!-- #region Header -->
+        <div class="flex flex-col px-3 sm:px-6 py-3">
+            <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                <mat-icon matPrefix>search</mat-icon>
+                <input matInput [formControl]="filterControl" name="search" type="text" placeholder="Search...">
+            </mat-form-field>
+        </div>
+        <!-- #endregion -->
 
-        @for (chunk of getCardsChunks(); track $index) {
-            <div class="flex flex-col">
-                <div>
-                    {{ $index * 100 + 1 }} - {{ $index * 100 + chunk.length }}
-                </div>
-                <div class="grid grid-cols-10 content-start gap-1">
-                    @for (card of chunk; track $index) {
-                        <a class="cursor-pointer hover:scale-125 transition-all" (click)="selectedCard = card" [routerLink]="[card.CardId]">
-                            <img [src]="card.getImageSrc()" [alt]="card.CardId">
-                        </a>
+        <div class="overflow-x-auto">
+            <table class="fm-table" matSort [matSortActive]="'CardId'" [matSortDirection]="'asc'" [matSortStart]="'desc'" [matSortDisableClear]="true" (matSortChange)="filterCards()">
+                <thead>
+                    <tr>
+                        <th class="text-left !pr-1 sticky left-0 z-20 border-r"></th>
+                        <th mat-sort-header="CardId" class="text-left !px-1">Id</th>
+                        <th mat-sort-header="CardName" class="text-left !px-1">Name</th>
+                        <th mat-sort-header="GuardianStar1" class="text-left">Guardian star (1)</th>
+                        <th mat-sort-header="GuardianStar2" class="text-left">Guardian star (2)</th>
+                        <th mat-sort-header="Level" class="text-left">Level</th>
+                        <th mat-sort-header="Type" class="text-left">Type</th>
+                        <th mat-sort-header="Attack" class="text-left">Attack</th>
+                        <th mat-sort-header="Defense" class="text-left">Defense</th>
+                        <th mat-sort-header="Attribute" class="text-left">Attribute</th>
+                        <th mat-sort-header="Password" class="text-left">Password</th>
+                        <th mat-sort-header="StarchipCost" class="text-left">StarchipCost</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (card of cards; track $index) {
+                        <tr>
+                            <td class="text-left sticky left-0 z-20 border-r">
+                                <a class="flex flex-row items-center gap-1" [routerLink]="['/cards/', card.CardId]">
+                                    <img [src]="card?.getArtworkSrc()" [alt]="card.CardId" class="w-12 h-12 min-w-12 min-h-12">
+                                </a>
+                            </td>
+                            <td class="text-left !px-1">
+                                <a class="flex flex-row items-center gap-1" [routerLink]="['/cards/', card.CardId]">
+                                    {{ card.getCardIdAsString() }}
+                                </a>
+                            </td>
+                            <td class="text-left !px-1">
+                                <a class="flex flex-row items-center gap-1" [routerLink]="['/cards/', card.CardId]">
+                                    {{ card.CardName }}
+                                </a>
+                            </td>
+                            <td class="text-left">{{ card.GuardianStar1 }}</td>
+                            <td class="text-left">{{ card.GuardianStar2 }}</td>
+                            <td class="text-left">{{ card.Level }}</td>
+                            <td class="text-left">{{ card.Type }}</td>
+                            <td class="text-left">{{ card.Attack }}</td>
+                            <td class="text-left">{{ card.Defense }}</td>
+                            <td class="text-left">{{ card.Attribute }}</td>
+                            <td class="text-left">{{ card.Password }}</td>
+                            <td class="text-left">{{ card.StarchipCost | number }}</td>
+                        </tr>
                     }
-                </div>
-            </div>
-        }
+                </tbody>
+            </table>
+        </div>
 
     </div>
 

@@ -1,20 +1,53 @@
-<app-breadcrumb [section]="'APPS'" [items]="[
-    { text: 'Duelists', route: ['..'], icon: 'style' },
-]"
-></app-breadcrumb>
+<div class="flex flex-col pb-6">
 
-<div class="flex flex-col max-w-7xl mx-auto p-6 pb-0">
+    <app-breadcrumb [section]="'Database'" [items]="[
+        { text: 'Duelists', route: [], icon: 'people' }
+    ]"
+    ></app-breadcrumb>
 
-    <div class="flex flex-col gap-2">
+    <div class="bg-card w-full">
 
-        @for (duelist of duelists; track $index) {
-            <a class="flex flex-row items-center gap-2" [routerLink]="[duelist.DuelistId]">
-                <img [src]="duelist.getDuelitsSrc()" [alt]="duelist.DuelistId">
-                <div>
-                    {{ duelist.Duelist }}
-                </div>
-            </a>
-        }
+        <!-- #region Header -->
+        <div class="flex flex-col px-3 sm:px-6 py-3">
+            <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                <mat-icon matPrefix>search</mat-icon>
+                <input matInput [formControl]="filterControl" name="search" type="text" placeholder="Search...">
+            </mat-form-field>
+        </div>
+        <!-- #endregion -->
+
+        <div class="overflow-x-auto">
+            <table class="fm-table" matSort [matSortActive]="'DuelistId'" [matSortDirection]="'asc'" [matSortStart]="'desc'" [matSortDisableClear]="true" (matSortChange)="filterDuelists()">
+                <thead>
+                    <tr>
+                        <th class="text-left !pr-1 sticky left-0 z-20 border-r"></th>
+                        <th mat-sort-header="DuelistId" class="text-left !px-1">Id</th>
+                        <th mat-sort-header="Duelist" class="text-left !px-1">Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (duelist of duelists; track $index) {
+                        <tr>
+                            <td class="text-left sticky left-0 z-20 border-r">
+                                <a class="flex flex-row items-center gap-1" [routerLink]="['/duelists/', duelist.DuelistId]">
+                                    <img [src]="duelist?.getDuelitsSrc()" [alt]="duelist.DuelistId" class="w-12 h-12 min-w-12 min-h-12">
+                                </a>
+                            </td>
+                            <td class="text-left !px-1">
+                                <a class="flex flex-row items-center gap-1" [routerLink]="['/duelists/', duelist.DuelistId]">
+                                    {{ duelist.DuelistId }}
+                                </a>
+                            </td>
+                            <td class="text-left !px-1">
+                                <a class="flex flex-row items-center gap-1" [routerLink]="['/duelists/', duelist.DuelistId]">
+                                    {{ duelist.Duelist }}
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
 
     </div>
 

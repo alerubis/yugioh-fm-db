@@ -28,18 +28,46 @@ export class Card {
         this.StarchipCost = value.StarchipCost;
     }
 
+    getCardIdAsString(): string {
+        const cardId = this.CardId.toString().padStart(3, '0');
+        return cardId;
+    }
+
+    getFullName(): string {
+        const cardId = this.getCardIdAsString();
+        const fullName = cardId + ' - ' + this.CardName;
+        return fullName;
+    }
+
     getArtworkSrc(): string {
         let src = '';
         if (this.CardId) {
-            src = 'assets/images/artwork/' + this.CardId.toString().padStart(3, '0') + '.png';
+            src = 'assets/images/cards/artwork/' + this.CardId.toString().padStart(3, '0') + '.png';
         }
         return src;
     }
 
-    getImageSrc(): string {
+    getCardSrc(): string {
         let src = '';
         if (this.CardId) {
-            src = 'assets/images/card/it/' + this.CardId.toString().padStart(3, '0') + '.png';
+            src = 'assets/images/cards/card/it/' + this.CardId.toString().padStart(3, '0') + '.png';
+        }
+        return src;
+    }
+
+    getDetailSrc(): string {
+        let src = '';
+        if (this.CardId) {
+            src = 'assets/images/cards/detail/it/' + this.CardId.toString().padStart(3, '0') + '.png';
+        }
+        return src;
+    }
+
+
+    getGuardianStar1Src(): string {
+        let src = '';
+        if (this.GuardianStar1) {
+            src = 'assets/images/guardian-stars/' + this.GuardianStar1.toLowerCase() + '.png';
         }
         return src;
     }
@@ -84,6 +112,15 @@ export class Drop {
         this._duelist = value;
     }
 
+
+    private _card: Card | undefined;
+    public get card(): Card | undefined {
+        return this._card;
+    }
+    public set card(value: Card | undefined) {
+        this._card = value;
+    }
+
     constructor(value: any) {
         this.PoolId = value.PoolId;
         this.DuelistId = value.Duelist;
@@ -100,12 +137,20 @@ export class EquipInfo {
     EquipId: number;
     CardId: number;
 
-    private _equipCard: Card | undefined;
-    public get equipCard(): Card | undefined {
-        return this._equipCard;
+    private _equip: Card | undefined;
+    public get equip(): Card | undefined {
+        return this._equip;
     }
-    public set equipCard(value: Card | undefined) {
-        this._equipCard = value;
+    public set equip(value: Card | undefined) {
+        this._equip = value;
+    }
+
+    private _card: Card | undefined;
+    public get card(): Card | undefined {
+        return this._card;
+    }
+    public set card(value: Card | undefined) {
+        this._card = value;
     }
 
     constructor(value: any) {

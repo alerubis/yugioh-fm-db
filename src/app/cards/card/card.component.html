@@ -1,138 +1,197 @@
-<app-breadcrumb [section]="'APPS'" [items]="[
-    { text: 'Cards', route: ['..'], icon: 'style' },
-    { text: card?.CardId + ' - ' + card?.CardName, route: [] },
-]"
-></app-breadcrumb>
+<div class="flex flex-col">
 
-<!-- #region Header -->
-<div class="flex flex-row items-center gap-3 px-3 sm:px-6 py-4 bg-white border-b">
-
-    <button mat-icon-button matTooltip="Back to people list" [routerLink]="['..']">
-        <mat-icon>arrow_back</mat-icon>
-    </button>
+    <app-breadcrumb [section]="'Database'" [items]="[
+        { text: 'Cards', route: ['..'], icon: 'style' },
+        { text: card?.getFullName(), route: [], img: card?.getArtworkSrc() },
+    ]"
+    ></app-breadcrumb>
 
     @if (card) {
-        <div class="flex flex-row items-center gap-4">
-            <img [src]="card.getArtworkSrc()" [alt]="card.CardId" class="w-12 h-12 rounded border">
-            <div class="flex flex-col">
-                <div class="text-2xl">
-                    {{ card.CardId }} - {{ card.CardName }}
+        <div class="flex flex-col xl:flex-row gap-6 py-6 sm:px-6">
+
+            <div class="flex flex-col gap-6 w-full xl:w-1/3">
+
+                <!-- #region Detail -->
+                <div class="fm-card w-full">
+                    <div class="fm-card-content !pb-0">
+                        <div class="flex flex-col gap-6">
+                            <div class="mx-auto">
+                                <img [src]="card.getDetailSrc()" [alt]="card.CardId">
+                            </div>
+                            <div class="flex flex-col divide-y">
+                                <div class="flex flex-row items-center justify-between gap-6 py-2">
+                                    <div class="text-secondary">Id</div>
+                                    <div>{{ card.getCardIdAsString() }}</div>
+                                </div>
+                                <div class="flex flex-row items-center justify-between gap-6 py-2">
+                                    <div class="text-secondary">Name</div>
+                                    <div>{{ card.CardName }}</div>
+                                </div>
+                                <div class="flex flex-row items-center justify-between gap-6 py-2">
+                                    <div class="text-secondary">Type</div>
+                                    <div>{{ card.Type }}</div>
+                                </div>
+                                @if (card.Type !== 'Equip') {
+                                    <div class="flex flex-row items-center justify-between gap-6 py-2">
+                                        <div class="text-secondary">GuardianStars</div>
+                                        <div>{{ card.GuardianStar1 }} / {{ card.GuardianStar2 }}</div>
+                                    </div>
+                                    <div class="flex flex-row items-center justify-between gap-6 py-2">
+                                        <div class="text-secondary">Level</div>
+                                        <div>{{ card.Level }}</div>
+                                    </div>
+                                    <div class="flex flex-row items-center justify-between gap-6 py-2">
+                                        <div class="text-secondary">ATK/DEF</div>
+                                        <div>{{ card.Attack }} / {{ card.Defense }}</div>
+                                    </div>
+                                    <div class="flex flex-row items-center justify-between gap-6 py-2">
+                                        <div class="text-secondary">Attribute</div>
+                                        <div>{{ card.Attribute }}</div>
+                                    </div>
+                                }
+                                <div class="flex flex-row items-center justify-between gap-6 py-2">
+                                    <div class="text-secondary">Password</div>
+                                    <div>{{ card.Password }}</div>
+                                </div>
+                                <div class="flex flex-row items-center justify-between gap-6 py-2">
+                                    <div class="text-secondary">StarchipCost</div>
+                                    <div>{{ card.StarchipCost }}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="text-sm">
-                    {{ card.Description }}
-                </div>
+                <!-- #endregion -->
+
             </div>
+
+            <div class="flex flex-col gap-6 w-full xl:w-1/3">
+
+                <!-- #region Drops -->
+                <div class="fm-card w-full">
+                    <div class="fm-card-title">
+                        Drops <span class="text-secondary text-sm">({{ drops.length }})</span>
+                    </div>
+                    <table class="fm-table">
+                        <thead>
+                            <tr>
+                                <th class="text-left">Duelist</th>
+                                <th class="text-left">Rank</th>
+                                <th class="text-right">%</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (drop of drops; track $index) {
+                                <tr>
+                                    <td class="text-left">
+                                        <a class="flex flex-row items-center gap-1" [routerLink]="['/duelists/', drop.DuelistId]">
+                                            <img [src]="drop.duelist?.getDuelitsSrc()" [alt]="drop.DuelistId" class="w-12 h-12">
+                                            <div>{{ drop.duelist?.Duelist }}</div>
+                                        </a>
+                                    </td>
+                                    <td class="text-left">{{ drop.PoolType }}</td>
+                                    <td class="text-right">{{ (drop.CardProbability / 2048 * 100) | number : '1.2-2' }}%</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <!-- #endregion -->
+
+                <!-- #region Opponent decks -->
+                <div class="fm-card w-full">
+                    <div class="fm-card-title">
+                        Opponent decks <span class="text-secondary text-sm">({{ opponentsDecks.length }})</span>
+                    </div>
+                    <table class="fm-table">
+                        <thead>
+                            <tr>
+                                <th class="text-left">Duelist</th>
+                                <th class="text-right">%</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (drop of opponentsDecks; track $index) {
+                                <tr>
+                                    <td class="text-left">
+                                        <a class="flex flex-row items-center gap-1" [routerLink]="['/duelists/', drop.DuelistId]">
+                                            <img [src]="drop.duelist?.getDuelitsSrc()" [alt]="drop.DuelistId" class="w-12 h-12">
+                                            <div>{{ drop.duelist?.Duelist }}</div>
+                                        </a>
+                                    </td>
+                                    <td class="text-right">{{ (drop.CardProbability / 2048 * 100) | number : '1.2-2' }}%</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <!-- #endregion -->
+
+            </div>
+
+            <div class="flex flex-col gap-6 w-full xl:w-1/3">
+
+                <!-- #region Can be equipped with -->
+                <div class="fm-card w-full">
+                    <div class="fm-card-title">
+                        Can be equipped with <span class="text-secondary text-sm">({{ equipInfos.length }})</span>
+                    </div>
+                    <table class="fm-table">
+                        <thead>
+                            <tr>
+                                <th class="text-left">Equip</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (equipInfo of equipInfos; track $index) {
+                                <tr>
+                                    <td class="text-left">
+                                        <a class="flex flex-row items-center gap-1" [routerLink]="['/cards/', equipInfo.EquipId]">
+                                            <img [src]="equipInfo.equip?.getArtworkSrc()" [alt]="equipInfo.EquipId" class="w-12 h-12">
+                                            <div>{{ equipInfo.equip?.CardName }}</div>
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <!-- #endregion -->
+
+                <!-- #region Equips -->
+                <div class="fm-card w-full">
+                    <div class="fm-card-title">
+                        Equips <span class="text-secondary text-sm">({{ equipInfosInverse.length }})</span>
+                    </div>
+                    <table class="fm-table">
+                        <thead>
+                            <tr>
+                                <th class="text-left">Card</th>
+                                <th class="text-left">Attack</th>
+                                <th class="text-left">Defense</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (equipInfo of equipInfosInverse; track $index) {
+                                <tr>
+                                    <td class="text-left">
+                                        <a class="flex flex-row items-center gap-1" [routerLink]="['/cards/', equipInfo.CardId]">
+                                            <img [src]="equipInfo.card?.getArtworkSrc()" [alt]="equipInfo.CardId" class="w-12 h-12">
+                                            <div>{{ equipInfo.card?.CardName }}</div>
+                                        </a>
+                                    </td>
+                                    <td class="text-left">{{ equipInfo.card?.Attack }}</td>
+                                    <td class="text-left">{{ equipInfo.card?.Defense }}</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <!-- #endregion -->
+
+            </div>
+
         </div>
-    } @else {
-        <app-message-box class="w-full" [type]="'error'" [message]="'Card not found'"></app-message-box>
     }
 
 </div>
-<!-- #endregion -->
-
-@if (card) {
-    <div class="flex flex-col p-6">
-
-        <div class="flex flex-row gap-6">
-
-            <div class="relative flex flex-col gap-6 p-6 bg-white border rounded-xl w-full sm:w-1/3">
-
-                <div class="mx-auto">
-                    <img [src]="card.getImageSrc()" [alt]="card.CardId">
-                </div>
-
-                <div class="flex flex-col divide-y">
-
-                    <div class="flex flex-row items-center justify-between gap-6 py-2">
-                        <div class="text-slate-500">CardId</div>
-                        <div>{{ card.CardId }}</div>
-                    </div>
-                    <div class="flex flex-row items-center justify-between gap-6 py-2">
-                        <div class="text-slate-500">CardName</div>
-                        <div>{{ card.CardName }}</div>
-                    </div>
-                    <div class="flex flex-row items-center justify-between gap-6 py-2">
-                        <div class="text-slate-500">GuardianStar1</div>
-                        <div>{{ card.GuardianStar1 }}</div>
-                    </div>
-                    <div class="flex flex-row items-center justify-between gap-6 py-2">
-                        <div class="text-slate-500">GuardianStar2</div>
-                        <div>{{ card.GuardianStar2 }}</div>
-                    </div>
-                    <div class="flex flex-row items-center justify-between gap-6 py-2">
-                        <div class="text-slate-500">Level</div>
-                        <div>{{ card.Level }}</div>
-                    </div>
-                    <div class="flex flex-row items-center justify-between gap-6 py-2">
-                        <div class="text-slate-500">Type</div>
-                        <div>{{ card.Type }}</div>
-                    </div>
-                    <div class="flex flex-row items-center justify-between gap-6 py-2">
-                        <div class="text-slate-500">Attack</div>
-                        <div>{{ card.Attack }}</div>
-                    </div>
-                    <div class="flex flex-row items-center justify-between gap-6 py-2">
-                        <div class="text-slate-500">Defense</div>
-                        <div>{{ card.Defense }}</div>
-                    </div>
-                    <div class="flex flex-row items-center justify-between gap-6 py-2">
-                        <div class="text-slate-500">Attribute</div>
-                        <div>{{ card.Attribute }}</div>
-                    </div>
-                    <div class="flex flex-row items-center justify-between gap-6 py-2">
-                        <div class="text-slate-500">Password</div>
-                        <div>{{ card.Password }}</div>
-                    </div>
-                    <div class="flex flex-row items-center justify-between gap-6 py-2">
-                        <div class="text-slate-500">StarchipCost</div>
-                        <div>{{ card.StarchipCost }}</div>
-                    </div>
-
-                </div>
-
-            </div>
-
-            <div class="relative flex flex-col gap-6 p-6 bg-white border rounded-xl w-full sm:w-1/3">
-
-                <div class="mx-auto">
-                    DROPS
-                </div>
-
-                <div class="flex flex-col divide-y">
-
-                    @for (drop of drops; track $index) {
-                        <div class="flex flex-row items-center justify-between gap-6 py-2">
-                            <img [src]="drop.duelist?.getDuelitsSrc()" [alt]="drop.DuelistId">
-                            <div>{{ drop.PoolType }}</div>
-                            <div>{{ drop.CardProbability }}</div>
-                            <div>{{ (drop.CardProbability / 2048 * 100) | number : '1.2-2' }}%</div>
-                        </div>
-                    }
-
-                </div>
-
-            </div>
-
-            <div class="relative flex flex-col gap-6 p-6 bg-white border rounded-xl w-full sm:w-1/3">
-
-                <div class="mx-auto">
-                    EQUIPS
-                </div>
-
-                <div class="flex flex-col divide-y">
-
-                    @for (equipInfo of equipInfos; track $index) {
-                        <div class="flex flex-row items-center justify-between gap-6 py-2">
-                            <img [src]="equipInfo.equipCard?.getArtworkSrc()" [alt]="equipInfo.EquipId" class="w-12 h-12">
-                            <div>{{ equipInfo.equipCard?.CardName }}</div>
-                        </div>
-                    }
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
-}

@@ -4,44 +4,127 @@
 @use '@angular/material' as mat;
 
 html {
-  @include mat.theme((
-    color: (
-      theme-type: light,
-      primary: mat.$azure-palette,
-      tertiary: mat.$blue-palette,
-    ),
-    typography: Roboto,
-    density: 0,
-  ));
+    @include mat.theme((
+        color: (
+            theme-type: light,
+            primary: mat.$azure-palette,
+            tertiary: mat.$blue-palette,
+        ),
+        typography: Roboto,
+        density: 0,
+    ));
 }/* You can add global styles to this file, and also import other style files */
 
-html, body { height: 100%; }
+html, body { height: 100%; background: var(--mat-sys-surface); }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
+// Tailwind
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+// Custom
+.bg-primary {
+    background-color: var(--mat-sys-primary);
+}
+
+.text-primary {
+    color: var(--mat-sys-primary);
+}
+
+.bg-surface {
+    background-color: var(--mat-sys-surface) !important;
+}
+
 a {
-  @apply hover:underline;
+    @apply hover:underline;
 }
 
-// Fix tailwind form field outline
-// https://github.com/tailwindlabs/tailwindcss/discussions/9993
-.mdc-notched-outline__notch {
-  border-right: none !important;
+.bg-card {
+    @apply bg-white;
 }
 
-.mat-mdc-dialog-surface {
-  overflow: hidden !important;
+.text-secondary {
+    @apply text-slate-500;
+}
 
-  .dialog-content {
-      max-height: calc(100vh - 64px - 64px);
-      overflow: auto;
-      @apply flex flex-col p-4 sm:p-6;
-  }
+// FM
+.fm-card {
+    @apply bg-card border sm:rounded-2xl;
 
-  .dialog-actions {
-      @apply flex flex-row items-center justify-end gap-4 p-4 sm:p-6;
-  }
+    .fm-card-title {
+        @apply text-lg px-3 sm:px-6 py-3 border-b;
+    }
+
+    .fm-card-content {
+        @apply flex flex-col px-3 sm:px-6 py-6;
+    }
+}
+
+.fm-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+
+    thead {
+        @apply bg-slate-200;
+
+        th {
+            &.sticky {
+                @apply bg-slate-200;
+            }
+        }
+    }
+
+    tbody {
+        tr {
+            @apply bg-white;
+
+            &:nth-child(even) {
+                @apply bg-gray-100;
+
+                td {
+                    &.sticky {
+                        @apply bg-gray-100;
+                    }
+                }
+            }
+
+            td {
+                &.sticky {
+                    @apply bg-white;
+                }
+            }
+        }
+    }
+
+    th {
+        padding: 8px 12px;
+        font-weight: 500;
+        font-size: 14px !important;
+    }
+
+    td {
+        padding: 4px 12px;
+    }
+
+    th {
+        @apply border-b;
+    }
+
+    th, td {
+        @apply border-b;
+
+        &:first-of-type {
+            @apply pl-3 sm:pl-6;
+        }
+
+        &:last-of-type {
+            @apply pr-3 sm:pr-6;
+        }
+    }
+
+    a {
+        @apply text-primary;
+    }
 }

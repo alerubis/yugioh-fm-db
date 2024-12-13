@@ -1,16 +1,16 @@
-<div class="flex flex-row items-center gap-2 border-b px-3 sm:px-6 py-3 bg-white">
-    <div class="text-sm">
+<div class="flex flex-row items-center gap-2 border-b px-3 sm:px-6 py-3 bg-card">
+    <div class="hidden sm:block text-sm">
         {{ section }}
     </div>
-    @for (item of items; track $index) {
-        <div class="text-xs">
+    @for (item of items; track $index; let first = $first;) {
+        <div class="text-xs" [ngClass]="{'hidden sm:block': first}">
             /
         </div>
         <a class="flex flex-row items-center gap-2" [routerLink]="item.route">
             @if (item.icon) {
                 <mat-icon>{{ item.icon }}</mat-icon>
             } @else if (item.img) {
-                IMG TODO
+                <img [src]="item.img" [alt]="item.text" class="w-6 h-6">
             }
             {{ item.text }}
         </a>

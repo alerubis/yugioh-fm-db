@@ -129,6 +129,11 @@ export class Drop {
         this.CardProbability = value.CardProbability;
     }
 
+    getCardProbabilityPercentage(): number {
+        const percentage = this.CardProbability / 2048 * 100;
+        return percentage;
+    }
+
 }
 
 export class EquipInfo {

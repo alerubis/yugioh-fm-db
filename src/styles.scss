@@ -6,7 +6,7 @@
 html {
     @include mat.theme((
         color: (
-            theme-type: light,
+            theme-type: dark,
             primary: mat.$azure-palette,
             tertiary: mat.$blue-palette,
         ),
@@ -22,6 +22,18 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+    .border,
+    .border-r,
+    .border-l,
+    .border-t,
+    .border-b,
+    .border-x,
+    .border-y {
+        @apply border-gray-700;
+    }
+}
 
 // Custom
 .bg-primary {
@@ -41,7 +53,7 @@ a {
 }
 
 .bg-card {
-    @apply bg-white;
+    background-color: var(--mat-sys-surface) !important;
 }
 
 .text-secondary {
@@ -50,14 +62,48 @@ a {
 
 // FM
 .fm-card {
-    @apply bg-card border sm:rounded-2xl;
+    @apply bg-card rounded shadow;
+
+    position: relative;
+    margin: 0 auto;
+    background-color: var(--mat-sys-surface);
+    background:
+        url('assets/images/misc/top-left.png') top left no-repeat, /* Angolo in alto a sinistra */
+        url('assets/images/misc/top-right.png') top right no-repeat, /* Angolo in alto a destra */
+        url('assets/images/misc/bottom-left.png') bottom left no-repeat, /* Angolo in basso a sinistra */
+        url('assets/images/misc/bottom-right.png') bottom right no-repeat, /* Angolo in basso a destra */
+        url('assets/images/misc/top.png') top center repeat-x, /* Lato superiore */
+        url('assets/images/misc/bottom.png') bottom center repeat-x, /* Lato inferiore */
+        url('assets/images/misc/left.png') center left repeat-y, /* Lato sinistro */
+        url('assets/images/misc/right.png') center right repeat-y, /* Lato destro */
+        url('assets/images/misc/background.png') repeat center center;   /* Background interno stirato */
+    background-size:
+        17px 26px,   /* Angolo superiore sinistro */
+        17px 26px,   /* Angolo superiore destro */
+        17px 13px,   /* Angolo inferiore sinistro */
+        17px 13px,   /* Angolo inferiore destro */
+        auto 26px,   /* Lato superiore */
+        auto 13px,   /* Lato inferiore */
+        17px auto,   /* Lato sinistro */
+        17px auto,   /* Lato destro */
+        auto auto;   /* Background interno stirato */
+    color: white;
 
     .fm-card-title {
-        @apply text-lg px-3 sm:px-6 py-3 border-b;
+        padding: 38px 29px 25px 29px;
+        background:
+            url('assets/images/misc/bottom-left.png') bottom left no-repeat, /* Angolo in basso a sinistra */
+            url('assets/images/misc/bottom-right.png') bottom right no-repeat, /* Angolo in basso a destra */
+            url('assets/images/misc/bottom.png') bottom center repeat-x;   /* Background interno stirato */
+        background-size:
+            17px 13px,   /* Angolo inferiore sinistro */
+            17px 13px,   /* Angolo inferiore destro */
+            auto 13px;   /* Lato inferiore */
     }
 
     .fm-card-content {
-        @apply flex flex-col px-3 sm:px-6 py-6;
+        @apply flex flex-col;
+        padding: 12px 29px 25px 29px;
     }
 }
 
@@ -65,38 +111,6 @@ a {
     width: 100%;
     border-collapse: separate;
     border-spacing: 0;
-
-    thead {
-        @apply bg-slate-200;
-
-        th {
-            &.sticky {
-                @apply bg-slate-200;
-            }
-        }
-    }
-
-    tbody {
-        tr {
-            @apply bg-white;
-
-            &:nth-child(even) {
-                @apply bg-gray-100;
-
-                td {
-                    &.sticky {
-                        @apply bg-gray-100;
-                    }
-                }
-            }
-
-            td {
-                &.sticky {
-                    @apply bg-white;
-                }
-            }
-        }
-    }
 
     th {
         padding: 8px 12px;

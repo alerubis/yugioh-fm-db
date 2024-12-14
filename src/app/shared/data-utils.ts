@@ -40,22 +40,26 @@ export class DataUtils {
     }
 
     static getDropsForCard(CardId: number | string | null): Drop[] {
-        const drops = this.getDrops().filter(x => x.CardId == CardId).filter(x => x.PoolType !== 'Deck');
+        let drops = this.getDrops().filter(x => x.CardId == CardId).filter(x => x.PoolType !== 'Deck');
+        drops = _.orderBy(drops, x => x.CardProbability, 'desc');
         return drops;
     }
 
     static getOpponentsDecksForCard(CardId: number | string | null): Drop[] {
-        const drops = this.getDrops().filter(x => x.CardId == CardId).filter(x => x.PoolType === 'Deck');
+        let drops = this.getDrops().filter(x => x.CardId == CardId).filter(x => x.PoolType === 'Deck');
+        drops = _.orderBy(drops, x => x.CardProbability, 'desc');
         return drops;
     }
 
     static getDropsForDuelist(DuelistId: number | string | null): Drop[] {
-        const drops = this.getDrops().filter(x => x.DuelistId == DuelistId).filter(x => x.PoolType !== 'Deck');
+        let drops = this.getDrops().filter(x => x.DuelistId == DuelistId).filter(x => x.PoolType !== 'Deck');
+        drops = _.orderBy(drops, x => x.CardProbability, 'desc');
         return drops;
     }
 
     static getDecksForDuelist(DuelistId: number | string | null): Drop[] {
-        const drops = this.getDrops().filter(x => x.DuelistId == DuelistId).filter(x => x.PoolType === 'Deck');
+        let drops = this.getDrops().filter(x => x.DuelistId == DuelistId).filter(x => x.PoolType === 'Deck');
+        drops = _.orderBy(drops, x => x.CardProbability, 'desc');
         return drops;
     }
 
@@ -69,12 +73,14 @@ export class DataUtils {
     }
 
     static getEquipInfosForCard(CardId: number | string | null): EquipInfo[] {
-        const equipinfos = this.getEquipInfos().filter(x => x.CardId == CardId);
+        let equipinfos = this.getEquipInfos().filter(x => x.CardId == CardId);
+        equipinfos = _.orderBy(equipinfos, x => x.card?.CardName, 'asc');
         return equipinfos;
     }
 
     static getEquipInfosForCardInverse(EquipId: number | string | null): EquipInfo[] {
-        const equipinfos = this.getEquipInfos().filter(x => x.EquipId == EquipId);
+        let equipinfos = this.getEquipInfos().filter(x => x.EquipId == EquipId);
+        equipinfos = _.orderBy(equipinfos, x => x.card?.Attack, 'desc');
         return equipinfos;
     }
 

@@ -7,16 +7,19 @@
     ></app-breadcrumb>
 
     @if (card) {
-        <div class="flex flex-col xl:flex-row gap-6 py-6 sm:px-6">
+        <div class="flex flex-col xl:flex-row gap-6 py-6 px-3 sm:px-6">
 
             <div class="flex flex-col gap-6 w-full xl:w-1/3">
 
                 <!-- #region Detail -->
                 <div class="fm-card w-full">
-                    <div class="fm-card-content !pb-0">
+                    <div class="fm-card-title">
+                        Card info
+                    </div>
+                    <div class="fm-card-content">
                         <div class="flex flex-col gap-6">
                             <div class="mx-auto">
-                                <img [src]="card.getDetailSrc()" [alt]="card.CardId">
+                                <img [src]="card.getCardSrc()" [alt]="card.CardId">
                             </div>
                             <div class="flex flex-col divide-y">
                                 <div class="flex flex-row items-center justify-between gap-6 py-2">
@@ -26,6 +29,10 @@
                                 <div class="flex flex-row items-center justify-between gap-6 py-2">
                                     <div class="text-secondary">Name</div>
                                     <div>{{ card.CardName }}</div>
+                                </div>
+                                <div class="flex flex-row items-center justify-between gap-6 py-2">
+                                    <div class="text-secondary">Description</div>
+                                    <div class="text-right">{{ card.Description }}</div>
                                 </div>
                                 <div class="flex flex-row items-center justify-between gap-6 py-2">
                                     <div class="text-secondary">Type</div>
@@ -72,29 +79,31 @@
                     <div class="fm-card-title">
                         Drops <span class="text-secondary text-sm">({{ drops.length }})</span>
                     </div>
-                    <table class="fm-table">
-                        <thead>
-                            <tr>
-                                <th class="text-left">Duelist</th>
-                                <th class="text-left">Rank</th>
-                                <th class="text-right">%</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @for (drop of drops; track $index) {
+                    <div class="fm-card-content">
+                        <table class="fm-table" matSort [matSortActive]="'CardProbability'" [matSortDirection]="'desc'" [matSortStart]="'desc'" [matSortDisableClear]="true" (matSortChange)="filterDrops($event)">
+                            <thead>
                                 <tr>
-                                    <td class="text-left">
-                                        <a class="flex flex-row items-center gap-1" [routerLink]="['/duelists/', drop.DuelistId]">
-                                            <img [src]="drop.duelist?.getDuelitsSrc()" [alt]="drop.DuelistId" class="w-12 h-12">
-                                            <div>{{ drop.duelist?.Duelist }}</div>
-                                        </a>
-                                    </td>
-                                    <td class="text-left">{{ drop.PoolType }}</td>
-                                    <td class="text-right">{{ (drop.CardProbability / 2048 * 100) | number : '1.2-2' }}%</td>
+                                    <th mat-sort-header="DuelistId" class="text-left">Duelist</th>
+                                    <th mat-sort-header="PoolType" class="text-left">Rank</th>
+                                    <th mat-sort-header="CardProbability" arrowPosition="before" class="text-right">%</th>
                                 </tr>
-                            }
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                @for (drop of drops; track $index) {
+                                    <tr>
+                                        <td class="text-left">
+                                            <a class="flex flex-row items-center gap-1" [routerLink]="['/duelists/', drop.DuelistId]">
+                                                <img [src]="drop.duelist?.getDuelitsSrc()" [alt]="drop.DuelistId" class="w-12 h-12">
+                                                <div>{{ drop.duelist?.Duelist }}</div>
+                                            </a>
+                                        </td>
+                                        <td class="text-left">{{ drop.PoolType }}</td>
+                                        <td class="text-right">{{ drop.getCardProbabilityPercentage() | number : '1.2-2' }}%</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
                 <!-- #endregion -->
 
@@ -103,27 +112,29 @@
                     <div class="fm-card-title">
                         Opponent decks <span class="text-secondary text-sm">({{ opponentsDecks.length }})</span>
                     </div>
-                    <table class="fm-table">
-                        <thead>
-                            <tr>
-                                <th class="text-left">Duelist</th>
-                                <th class="text-right">%</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @for (drop of opponentsDecks; track $index) {
+                    <div class="fm-card-content">
+                        <table class="fm-table" matSort [matSortActive]="'CardProbability'" [matSortDirection]="'desc'" [matSortStart]="'desc'" [matSortDisableClear]="true" (matSortChange)="filterOpponentDecks($event)">
+                            <thead>
                                 <tr>
-                                    <td class="text-left">
-                                        <a class="flex flex-row items-center gap-1" [routerLink]="['/duelists/', drop.DuelistId]">
-                                            <img [src]="drop.duelist?.getDuelitsSrc()" [alt]="drop.DuelistId" class="w-12 h-12">
-                                            <div>{{ drop.duelist?.Duelist }}</div>
-                                        </a>
-                                    </td>
-                                    <td class="text-right">{{ (drop.CardProbability / 2048 * 100) | number : '1.2-2' }}%</td>
+                                    <th mat-sort-header="DuelistId" class="text-left">Duelist</th>
+                                    <th mat-sort-header="CardProbability" arrowPosition="before" class="text-right">%</th>
                                 </tr>
-                            }
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                @for (drop of opponentsDecks; track $index) {
+                                    <tr>
+                                        <td class="text-left">
+                                            <a class="flex flex-row items-center gap-1" [routerLink]="['/duelists/', drop.DuelistId]">
+                                                <img [src]="drop.duelist?.getDuelitsSrc()" [alt]="drop.DuelistId" class="w-12 h-12">
+                                                <div>{{ drop.duelist?.Duelist }}</div>
+                                            </a>
+                                        </td>
+                                        <td class="text-right">{{ (drop.CardProbability / 2048 * 100) | number : '1.2-2' }}%</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
                 <!-- #endregion -->
 
@@ -131,63 +142,73 @@
 
             <div class="flex flex-col gap-6 w-full xl:w-1/3">
 
-                <!-- #region Can be equipped with -->
-                <div class="fm-card w-full">
-                    <div class="fm-card-title">
-                        Can be equipped with <span class="text-secondary text-sm">({{ equipInfos.length }})</span>
-                    </div>
-                    <table class="fm-table">
-                        <thead>
-                            <tr>
-                                <th class="text-left">Equip</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @for (equipInfo of equipInfos; track $index) {
-                                <tr>
-                                    <td class="text-left">
-                                        <a class="flex flex-row items-center gap-1" [routerLink]="['/cards/', equipInfo.EquipId]">
-                                            <img [src]="equipInfo.equip?.getArtworkSrc()" [alt]="equipInfo.EquipId" class="w-12 h-12">
-                                            <div>{{ equipInfo.equip?.CardName }}</div>
-                                        </a>
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
-                <!-- #endregion -->
+                @if (card.Type === 'Equip') {
 
-                <!-- #region Equips -->
-                <div class="fm-card w-full">
-                    <div class="fm-card-title">
-                        Equips <span class="text-secondary text-sm">({{ equipInfosInverse.length }})</span>
+                    <!-- #region Equips -->
+                    <div class="fm-card w-full">
+                        <div class="fm-card-title">
+                            Equips <span class="text-secondary text-sm">({{ equipsInverse.length }})</span>
+                        </div>
+                        <div class="fm-card-content">
+                            <table class="fm-table" matSort [matSortActive]="'Attack'" [matSortDirection]="'desc'" [matSortStart]="'desc'" [matSortDisableClear]="true" (matSortChange)="sortEquipsInverse($event)">
+                                <thead>
+                                    <tr>
+                                        <th mat-sort-header="Card" class="text-left">Card</th>
+                                        <th mat-sort-header="Attack" class="text-left">Attack</th>
+                                        <th mat-sort-header="Defense" class="text-left">Defense</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @for (equip of equipsInverse; track $index) {
+                                        <tr>
+                                            <td class="text-left">
+                                                <a class="flex flex-row items-center gap-1" [routerLink]="['/cards/', equip.CardId]">
+                                                    <img [src]="equip.card?.getArtworkSrc()" [alt]="equip.CardId" class="w-12 h-12">
+                                                    <div>{{ equip.card?.CardName }}</div>
+                                                </a>
+                                            </td>
+                                            <td class="text-left">{{ equip.card?.Attack }}</td>
+                                            <td class="text-left">{{ equip.card?.Defense }}</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                    <table class="fm-table">
-                        <thead>
-                            <tr>
-                                <th class="text-left">Card</th>
-                                <th class="text-left">Attack</th>
-                                <th class="text-left">Defense</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @for (equipInfo of equipInfosInverse; track $index) {
-                                <tr>
-                                    <td class="text-left">
-                                        <a class="flex flex-row items-center gap-1" [routerLink]="['/cards/', equipInfo.CardId]">
-                                            <img [src]="equipInfo.card?.getArtworkSrc()" [alt]="equipInfo.CardId" class="w-12 h-12">
-                                            <div>{{ equipInfo.card?.CardName }}</div>
-                                        </a>
-                                    </td>
-                                    <td class="text-left">{{ equipInfo.card?.Attack }}</td>
-                                    <td class="text-left">{{ equipInfo.card?.Defense }}</td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
-                <!-- #endregion -->
+                    <!-- #endregion -->
+
+                } @else {
+
+                    <!-- #region Can be equipped with -->
+                    <div class="fm-card w-full">
+                        <div class="fm-card-title">
+                            Can be equipped with <span class="text-secondary text-sm">({{ equips.length }})</span>
+                        </div>
+                        <div class="fm-card-content">
+                            <table class="fm-table" matSort [matSortActive]="'CardName'" [matSortDirection]="'asc'" [matSortDisableClear]="true" (matSortChange)="sortEquips($event)">
+                                <thead>
+                                    <tr>
+                                        <th mat-sort-header="CardName" class="text-left">Equip</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @for (equip of equips; track $index) {
+                                        <tr>
+                                            <td class="text-left">
+                                                <a class="flex flex-row items-center gap-1" [routerLink]="['/cards/', equip.EquipId]">
+                                                    <img [src]="equip.equip?.getArtworkSrc()" [alt]="equip.EquipId" class="w-12 h-12">
+                                                    <div>{{ equip.equip?.CardName }}</div>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <!-- #endregion -->
+
+                }
 
             </div>
 

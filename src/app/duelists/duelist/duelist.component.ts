@@ -4,7 +4,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, ParamMap, RouterLink } from '@angular/router';
-import { BreadcrumbComponent } from '../../shared/components/breadcrumb/breadcrumb.component';
 import { DataUtils } from '../../shared/data-utils';
 import { Duelist, Drop, EquipInfo } from '../../shared/types';
 
@@ -16,7 +15,6 @@ import { Duelist, Drop, EquipInfo } from '../../shared/types';
         MatButtonModule,
         MatIconModule,
         DecimalPipe,
-        BreadcrumbComponent
     ],
     templateUrl: './duelist.component.html',
 })

@@ -1,16 +1,17 @@
 import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
-import { provideRouter, withInMemoryScrolling } from '@angular/router';
+import { provideRouter, RouteReuseStrategy, withInMemoryScrolling } from '@angular/router';
 
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { routes } from './app.routes';
+import { CustomRouteReuseStrategy, routes } from './app.routes';
 
 export const appConfig: ApplicationConfig = {
     providers: [
         provideZoneChangeDetection({ eventCoalescing: true }),
         provideRouter(routes, withInMemoryScrolling({
             scrollPositionRestoration: 'top',
-            anchorScrolling: 'enabled'
+            anchorScrolling: 'enabled',
         })),
+        { provide: RouteReuseStrategy, useClass: CustomRouteReuseStrategy },
         provideAnimationsAsync(),
     ]
 };

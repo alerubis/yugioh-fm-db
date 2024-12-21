@@ -1,12 +1,11 @@
 import { DecimalPipe } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSortModule, Sort } from '@angular/material/sort';
 import { Title } from '@angular/platform-browser';
-import { ActivatedRoute, ParamMap, RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import _ from 'lodash';
-import { BreadcrumbComponent } from '../../shared/components/breadcrumb/breadcrumb.component';
 import { DataUtils } from '../../shared/data-utils';
 import { Card, Drop, EquipInfo } from '../../shared/types';
 
@@ -18,35 +17,33 @@ import { Card, Drop, EquipInfo } from '../../shared/types';
         MatButtonModule,
         MatIconModule,
         DecimalPipe,
-        BreadcrumbComponent,
         MatSortModule,
     ],
     templateUrl: './card.component.html',
 })
-export class CardComponent implements OnInit {
+export class CardComponent implements OnChanges {
 
-    card?: Card;
+    @Input() card?: Card;
+
     drops: Drop[] = [];
     opponentsDecks: Drop[] = [];
     equips: EquipInfo[] = [];
     equipsInverse: EquipInfo[] = [];
 
     constructor(
-        private _activatedRoute: ActivatedRoute,
         private titleService: Title,
     ) {
         this.titleService.setTitle('? - Cards - Yu-Gi-Oh! Forbidden Memories Database');
     }
 
-    ngOnInit(): void {
-        this._activatedRoute.paramMap.subscribe((params: ParamMap) => {
-            this.card = DataUtils.getCardFromId(params.get('id'));
-            this.titleService.setTitle((this.card?.getFullName() || '?') + ' - Cards - Yu-Gi-Oh! Forbidden Memories Database');
-            this.drops = DataUtils.getDropsForCard(params.get('id'));
-            this.opponentsDecks = DataUtils.getOpponentsDecksForCard(params.get('id'));
-            this.equips = DataUtils.getEquipInfosForCard(params.get('id'));
-            this.equipsInverse = DataUtils.getEquipInfosForCardInverse(params.get('id'));
-        });
+    ngOnChanges(changes: SimpleChanges): void {
+        if (this.card) {
+            this.titleService.setTitle((this.card.getFullName() || '?') + ' - Cards - Yu-Gi-Oh! Forbidden Memories Database');
+            this.drops = DataUtils.getDropsForCard(this.card.CardId);
+            this.opponentsDecks = DataUtils.getOpponentsDecksForCard(this.card.CardId);
+            this.equips = DataUtils.getEquipInfosForCard(this.card.CardId);
+            this.equipsInverse = DataUtils.getEquipInfosForCardInverse(this.card.CardId);
+        }
     }
 
     filterDrops(sort: Sort): void {

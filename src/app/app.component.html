@@ -1,62 +1,22 @@
-<mat-sidenav-container class="h-screen">
+<div class="flex flex-col h-full">
 
-    <mat-sidenav #sidenav class="!bg-slate-800 max-w-xs border-r !border-gray-700" [ngClass]="mobileQuery.matches ? '!w-[calc(100%-4rem)]' : '!w-72'" [mode]="mobileQuery.matches ? 'over' : 'side'" [opened]="!mobileQuery.matches">
-        <div class="flex flex-col">
+    <div class="router-outlet-container">
+        <router-outlet></router-outlet>
+    </div>
 
-            <div class="flex flex-row items-center justify-between text-white p-6 pb-0 pr-3">
-                <div class="text-2xl">
-                    Menu
+    <div class="fm-nav">
+        @for (item of navigation; track $index) {
+            <a class="fm-nav-item"
+                [routerLink]="item.url"
+                [routerLinkActive]="['active']">
+                <div class="fm-nav-item-icon-container">
+                    <mat-icon>{{ item.icon }}</mat-icon>
                 </div>
-                <button mat-icon-button (click)="sidenav.toggle()" [ngClass]="mobileQuery.matches ? '' : '!hidden'">
-                    <mat-icon class="text-white">arrow_back</mat-icon>
-                </button>
-            </div>
-
-            <div class="flex flex-col gap-8 flex-auto px-6 py-8">
-                @for (group of navigation; track $index) {
-                    <div class="flex flex-col">
-                        <div class="text-slate-400 text-sm border-y border-slate-600 px-3 py-1">
-                            {{ group.title }}
-                        </div>
-                        <div class="flex flex-col gap-1 mt-3">
-                            @for (item of group.items; track $index) {
-                                <a class="flex flex-row items-center justify-between gap-4 px-4 py-3 rounded cursor-pointer text-gray-400 hover:text-white hover:bg-slate-700 hover:no-underline"
-                                [routerLink]="item.url"
-                                [routerLinkActive]="['bg-primary', 'text-white']"
-                                (click)="mobileQuery.matches ? sidenav.close() : null">
-                                    <div class="flex flex-row items-center gap-4">
-                                        <mat-icon>{{ item.icon }}</mat-icon>
-                                        <div class="text-sm">{{ item.title }}</div>
-                                    </div>
-                                </a>
-                            }
-                        </div>
-                    </div>
-                }
-            </div>
-
-        </div>
-    </mat-sidenav>
-
-    <mat-sidenav-content>
-        <div class="flex flex-col w-full h-full">
-            <mat-toolbar class="h-14 min-h-14 border-b">
-                <div class="flex flex-row items-center justify-between w-full">
-                    <button mat-icon-button (click)="sidenav.toggle()">
-                        <mat-icon>menu</mat-icon>
-                    </button>
-                    <div class="flex flex-row items-center justify-end">
-                        <button mat-icon-button>
-                            <mat-icon>share</mat-icon>
-                        </button>
-                        <button mat-icon-button>
-                            <mat-icon>language</mat-icon>
-                        </button>
-                    </div>
+                <div class="fm-nav-item-title">
+                    {{ item.title }}
                 </div>
-            </mat-toolbar>
-            <router-outlet></router-outlet>
-        </div>
-    </mat-sidenav-content>
+            </a>
+        }
+    </div>
 
-</mat-sidenav-container>
+</div>

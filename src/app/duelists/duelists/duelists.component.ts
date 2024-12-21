@@ -9,7 +9,6 @@ import { Title } from '@angular/platform-browser';
 import { RouterLink } from '@angular/router';
 import _ from 'lodash';
 import { debounceTime } from 'rxjs';
-import { BreadcrumbComponent } from '../../shared/components/breadcrumb/breadcrumb.component';
 import { DataUtils } from '../../shared/data-utils';
 import { Duelist } from '../../shared/types';
 
@@ -17,7 +16,6 @@ import { Duelist } from '../../shared/types';
     selector: 'app-duelists',
     standalone: true,
     imports: [
-        BreadcrumbComponent,
         DecimalPipe,
         MatFormFieldModule,
         MatIconModule,

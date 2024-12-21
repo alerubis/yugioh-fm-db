@@ -7,11 +7,6 @@ import { MatSidenavContent, MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbar } from '@angular/material/toolbar';
 import { NavigationEnd, Router, RouterModule } from '@angular/router';
 
-export interface NavigationGroup {
-    title: string;
-    items: NavigationItem[];
-}
-
 export interface NavigationItem {
     title: string;
     icon: string;
@@ -32,84 +27,44 @@ export interface NavigationItem {
 })
 export class AppComponent implements OnInit, OnDestroy {
 
-    @ViewChild(MatSidenavContent) sidenavContent!: MatSidenavContent;
-
-    mobileQuery: MediaQueryList;
-
-    private _mobileQueryListener: () => void;
-
     constructor(
         private _changeDetectorRef: ChangeDetectorRef,
         private _media: MediaMatcher,
         private _router: Router,
     ) {
-        this.mobileQuery = this._media.matchMedia('(max-width: 639px)');
-        this._mobileQueryListener = () => this._changeDetectorRef.detectChanges();
-        this.mobileQuery.addEventListener('change', this._mobileQueryListener);
     }
 
     ngOnInit(): void {
-        this._router.events.subscribe(event => {
-            if (event instanceof NavigationEnd) {
-                this.sidenavContent.scrollTo({ top: 0, behavior: 'instant' });
-            }
-        });
     }
 
     ngOnDestroy(): void {
-        this.mobileQuery.removeEventListener('change', this._mobileQueryListener);
     }
 
-    navigation: NavigationGroup[] = [
+    navigation: NavigationItem[] = [
         {
-            title: 'Database',
-            items: [
-                {
-                    title: 'Home',
-                    icon: 'home',
-                    url: 'home'
-                },
-                {
-                    title: 'Cards',
-                    icon: 'style',
-                    url: 'cards'
-                },
-                {
-                    title: 'Duelists',
-                    icon: 'people',
-                    url: 'duelists'
-                }
-            ]
+            title: 'Home',
+            icon: 'home',
+            url: 'home'
         },
         {
-            title: 'Tools',
-            items: [
-                {
-                    title: 'Initial deck simulator',
-                    icon: 'home',
-                    url: 'initial-deck-simulator'
-                },
-                {
-                    title: 'Duelist deck simulator',
-                    icon: 'home',
-                    url: 'duelist-deck-simulator'
-                }
-            ]
+            title: 'Cards',
+            icon: 'style',
+            url: 'cards'
+        },
+        {
+            title: 'Duelists',
+            icon: 'people',
+            url: 'duelists'
+        },
+        {
+            title: 'Fusions',
+            icon: 'chevron_left',
+            url: 'fusions'
         },
         {
             title: 'Other',
-            items: [
-                {
-                    title: 'Settings',
-                    icon: 'settings',
-                    url: 'settings'
-                },
-                {
-                    title: 'Info',
-                    icon: 'info',
-                    url: 'info'
-                }
-            ]
+            icon: 'menu',
+            url: 'other'
         }
     ];
 

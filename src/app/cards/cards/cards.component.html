@@ -1,78 +1,193 @@
-<div class="flex flex-col pb-6">
+<mat-sidenav-container class="h-full" (backdropClick)="handleBackdropClick()">
 
-    <app-breadcrumb [section]="'Database'" [items]="[
-        { text: 'Cards', route: [], icon: 'style' }
-    ]"
-    ></app-breadcrumb>
+    <mat-sidenav-content>
 
-    <div class="bg-card w-full">
+        <div class="flex flex-col h-full overflow-y-auto">
 
-        <div class="fm-card w-full">
-            <div class="fm-card-title">
-                Cards
-                <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <!-- #region Filters -->
+            <div class="flex flex-row items-center justify-between gap-3 bg-card p-3 border-b sticky top-0">
+                <mat-form-field class="dense-form-field flex-auto" appearance="outline" subscriptSizing="dynamic">
                     <mat-icon matPrefix>search</mat-icon>
                     <input matInput [formControl]="filterControl" name="search" type="text" placeholder="Search...">
+                    @if (filterControl.value) {
+                        <button matSuffix mat-icon-button (click)="filterControl.setValue('')">
+                            <mat-icon>clear</mat-icon>
+                        </button>
+                    }
                 </mat-form-field>
+                <div class="flex flex-row items-center justify-end">
+                    <button mat-icon-button>
+                        <mat-icon>filter_alt</mat-icon>
+                    </button>
+                    <button mat-icon-button [matMenuTriggerFor]="menuSort">
+                        <mat-icon>sort_by_alpha</mat-icon>
+                    </button>
+                    <mat-menu #menuSort="matMenu">
+                        <button mat-menu-item>By number</button>
+                        <button mat-menu-item>By name</button>
+                        <button mat-menu-item>By attack</button>
+                        <button mat-menu-item>By defense</button>
+                    </mat-menu>
+                </div>
             </div>
-            <div class="fm-card-content">
-                <table class="fm-table" matSort [matSortActive]="'CardId'" [matSortDirection]="'asc'" [matSortStart]="'desc'" [matSortDisableClear]="true" (matSortChange)="filterCards()">
-                    <thead>
-                        <tr>
-                            <th class="text-left !pr-1 sticky left-0 z-20 border-r"></th>
-                            <th mat-sort-header="CardId" class="text-left !px-1">Id</th>
-                            <th mat-sort-header="CardName" class="text-left !px-1">Name</th>
-                            <th mat-sort-header="Description" class="text-left">Description</th>
-                            <th mat-sort-header="GuardianStar1" class="text-left">Guardian star (1)</th>
-                            <th mat-sort-header="GuardianStar2" class="text-left">Guardian star (2)</th>
-                            <th mat-sort-header="Level" class="text-left">Level</th>
-                            <th mat-sort-header="Type" class="text-left">Type</th>
-                            <th mat-sort-header="Attack" class="text-left">Attack</th>
-                            <th mat-sort-header="Defense" class="text-left">Defense</th>
-                            <th mat-sort-header="Attribute" class="text-left">Attribute</th>
-                            <th mat-sort-header="Password" class="text-left">Password</th>
-                            <th mat-sort-header="StarchipCost" class="text-left">StarchipCost</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @for (card of cards; track $index) {
-                            <tr>
-                                <td class="text-left sticky left-0 z-20 border-r">
-                                    <a class="flex flex-row items-center gap-1" [routerLink]="['/cards/', card.CardId]">
-                                        <img [src]="card?.getArtworkSrc()" [alt]="card.CardId" class="w-12 h-12 min-w-12 min-h-12">
-                                    </a>
-                                </td>
-                                <td class="text-left !px-1">
-                                    <a class="flex flex-row items-center gap-1" [routerLink]="['/cards/', card.CardId]">
-                                        {{ card.getCardIdAsString() }}
-                                    </a>
-                                </td>
-                                <td class="text-left !px-1">
-                                    <a class="flex flex-row items-center gap-1" [routerLink]="['/cards/', card.CardId]">
-                                        {{ card.CardName }}
-                                    </a>
-                                </td>
-                                <td class="text-left">{{ card.Description }}</td>
-                                <td class="text-left">{{ card.GuardianStar1 }}</td>
-                                <td class="text-left">{{ card.GuardianStar2 }}</td>
-                                <td class="text-left">{{ card.Level }}</td>
-                                <td class="text-left">{{ card.Type }}</td>
-                                <td class="text-left">{{ card.Attack }}</td>
-                                <td class="text-left">{{ card.Defense }}</td>
-                                <td class="text-left">{{ card.Attribute }}</td>
-                                <td class="text-left">{{ card.Password }}</td>
-                                <td class="text-left">
-                                    @if (card.StarchipCost) {
-                                        {{ card.StarchipCost | number }}
-                                    }
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
+            <!-- #endregion -->
+
+            <!-- #region Cards list -->
+            <div class="grid grid-cols-5 gap-1 p-3">
+                @for (card of cards; track $index) {
+                    <a class="hover:scale-110 transition-all" [routerLink]="['/cards/', card.CardId]" (click)="selectedCard = card">
+                        <img [src]="card?.getCardSrc()" [alt]="card.CardId">
+                    </a>
+                }
             </div>
+            <!-- #region Cards list -->
+
         </div>
 
-    </div>
+    </mat-sidenav-content>
 
-</div>
+    <mat-sidenav class="!w-screen !rounded-none" [mode]="'over'" [position]="'end'" [opened]="!!selectedCard">
+        <div class="flex flex-col min-h-full bg-surface">
+            @if (selectedCard) {
+
+                <!-- #region Header -->
+                <div class="flex flex-row items-center gap-3 bg-card p-3 border-b sticky top-0 z-10">
+                    <a mat-icon-button [routerLink]="['/cards/']" (click)="selectedCard = undefined">
+                        <mat-icon>arrow_back</mat-icon>
+                    </a>
+                    <img [src]="selectedCard.getArtworkSrc()" [alt]="selectedCard.CardId" class="w-8 h-8">
+                    <div class="text-lg flex-auto truncate">
+                        {{ selectedCard.getFullName() }}
+                    </div>
+                </div>
+                <!-- #endregion -->
+
+                <div class="flex flex-col px-3 py-6 gap-6">
+
+                    <div class="flex flex-col items-center justify-center gap-3">
+                        <img [src]="selectedCard.getCardSrc()" [alt]="selectedCard.CardId" style="width: 140px; height: 212px;">
+                        <div class="text-sm text-secondary italic text-center">
+                            {{ selectedCard.Description }}
+                        </div>
+                    </div>
+
+                    <!-- #region Card info -->
+                    <mat-expansion-panel class="fm-expansion-panel" [expanded]="true">
+                        <mat-expansion-panel-header [collapsedHeight]="'48px'" [expandedHeight]="'48px'">
+                            Card info
+                        </mat-expansion-panel-header>
+                        <div class="flex flex-col gap-6 px-4 py-2">
+                            <div class="flex flex-col divide-y">
+                                <div class="flex flex-row items-center justify-between gap-6 py-2">
+                                    <div class="text-secondary">Type</div>
+                                    <div>{{ selectedCard.Type }}</div>
+                                </div>
+                                @if (selectedCard.Type !== 'Equip') {
+                                    <div class="flex flex-row items-center justify-between gap-6 py-2">
+                                        <div class="text-secondary">GuardianStars</div>
+                                        <div>{{ selectedCard.GuardianStar1 }} / {{ selectedCard.GuardianStar2 }}</div>
+                                    </div>
+                                    <div class="flex flex-row items-center justify-between gap-6 py-2">
+                                        <div class="text-secondary">Level</div>
+                                        <div>{{ selectedCard.Level }}</div>
+                                    </div>
+                                    <div class="flex flex-row items-center justify-between gap-6 py-2">
+                                        <div class="text-secondary">ATK/DEF</div>
+                                        <div>{{ selectedCard.Attack }} / {{ selectedCard.Defense }}</div>
+                                    </div>
+                                    <div class="flex flex-row items-center justify-between gap-6 py-2">
+                                        <div class="text-secondary">Attribute</div>
+                                        <div>{{ selectedCard.Attribute }}</div>
+                                    </div>
+                                }
+                                <div class="flex flex-row items-center justify-between gap-6 py-2">
+                                    <div class="text-secondary">Password</div>
+                                    <div>{{ selectedCard.Password }}</div>
+                                </div>
+                                <div class="flex flex-row items-center justify-between gap-6 py-2">
+                                    <div class="text-secondary">StarchipCost</div>
+                                    <div>{{ selectedCard.StarchipCost }}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </mat-expansion-panel>
+                    <!-- #endregion -->
+
+                    <!-- #region Drops -->
+                    <mat-expansion-panel class="fm-expansion-panel" [expanded]="true">
+                        <mat-expansion-panel-header [collapsedHeight]="'48px'" [expandedHeight]="'48px'">
+                            Drops
+                            @if (loading) {
+                                (...)
+                            } @else {
+                                ({{ drops.length }})
+                            }
+                        </mat-expansion-panel-header>
+                        @if (loading) {
+                            <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+                        } @else {
+                            @if (drops.length > 0) {
+                                <table class="fm-table" matSort [matSortActive]="'CardProbability'" [matSortDirection]="'desc'" [matSortStart]="'desc'" [matSortDisableClear]="true" (matSortChange)="sortDrops($event)">
+                                    <thead>
+                                        <tr>
+                                            <th mat-sort-header="DuelistId" class="text-left">Duelist</th>
+                                            <th mat-sort-header="PoolType" class="text-left">Rank</th>
+                                            <th mat-sort-header="CardProbability" arrowPosition="before" class="text-right">%</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @for (drop of drops; track $index) {
+                                            <tr>
+                                                <td class="text-left">
+                                                    <a class="flex flex-row items-center gap-1" [routerLink]="['/duelists/', drop.DuelistId]">
+                                                        <img [src]="drop.duelist?.getDuelitsSrc()" [alt]="drop.DuelistId" class="w-12 h-12">
+                                                        <div>{{ drop.duelist?.Duelist }}</div>
+                                                    </a>
+                                                </td>
+                                                <td class="text-left">{{ drop.PoolType }}</td>
+                                                <td class="text-right">{{ drop.getCardProbabilityPercentage() | number : '1.2-2' }}%</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            } @else {
+                                <div class="flex flex-col items-center justify-center p-6">
+                                    <div class="text-gray-500 text-7xl mb-6">
+                                        :(
+                                    </div>
+                                    <div class="text-center">
+                                        No one drops it.
+                                    </div>
+                                    <div class="text-gray-500 text-sm text-center">
+                                        This card cannot be obtained in duel.
+                                    </div>
+                                </div>
+                            }
+                        }
+                    </mat-expansion-panel>
+                    <!-- #endregion -->
+
+                    <mat-expansion-panel class="fm-expansion-panel" [expanded]="true">
+                        <mat-expansion-panel-header [collapsedHeight]="'48px'" [expandedHeight]="'48px'">
+                            Opponent decks
+                        </mat-expansion-panel-header>
+                    </mat-expansion-panel>
+
+                    <mat-expansion-panel class="fm-expansion-panel" [expanded]="true">
+                        <mat-expansion-panel-header [collapsedHeight]="'48px'" [expandedHeight]="'48px'">
+                            Equips
+                        </mat-expansion-panel-header>
+                    </mat-expansion-panel>
+
+                    <mat-expansion-panel class="fm-expansion-panel" [expanded]="true">
+                        <mat-expansion-panel-header [collapsedHeight]="'48px'" [expandedHeight]="'48px'">
+                            Can be equipped with
+                        </mat-expansion-panel-header>
+                    </mat-expansion-panel>
+
+                </div>
+            }
+        </div>
+    </mat-sidenav>
+
+</mat-sidenav-container>

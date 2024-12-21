@@ -1,14 +1,15 @@
 import { Routes } from '@angular/router';
-import { CardComponent } from './card/card.component';
 import { CardsComponent } from './cards/cards.component';
 
 export const routes: Routes = [
     {
         path: '',
         component: CardsComponent,
+        data: { shouldReuse: true },
     },
     {
         path: ':id',
-        component: CardComponent,
+        component: CardsComponent,
+        data: { shouldReuse: true },
     }
 ];

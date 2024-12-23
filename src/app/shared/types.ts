@@ -13,6 +13,8 @@ export class Card {
     Password: string;
     StarchipCost: number;
 
+    hasDrops: boolean;
+
     constructor(value: any) {
         this.CardId = value.CardId;
         this.CardName = value.CardName;
@@ -26,6 +28,8 @@ export class Card {
         this.Attribute = value.Attribute;
         this.Password = value.Password;
         this.StarchipCost = value.StarchipCost;
+
+        this.hasDrops = value.hasDrops;
     }
 
     getCardIdAsString(): string {

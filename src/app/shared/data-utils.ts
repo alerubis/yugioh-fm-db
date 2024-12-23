@@ -7,8 +7,21 @@ import { Card, Drop, Duelist, EquipInfo } from './types';
 
 export class DataUtils {
 
+    static cardsCache: Card[] | undefined;
+    static duelistsCache: Duelist[] | undefined;
+    static dropsCache: Drop[] | undefined;
+    static equipInfoCache: EquipInfo[] | undefined;
+
     static getCards(): Card[] {
+        if (this.cardsCache) {
+            return this.cardsCache;
+        }
         const cards: Card[] = cardsData.map(x => new Card(x));
+        const drops: Drop[] = dropsData.map(x => new Drop(x));
+        for (const card of cards) {
+            card.hasDrops = drops.some(x => x.CardId == card.CardId && x.PoolType !== 'Deck');
+        }
+        this.cardsCache = cards;
         return cards;
     }
 
@@ -19,8 +32,12 @@ export class DataUtils {
     }
 
     static getDuelists(): Duelist[] {
+        if (this.duelistsCache) {
+            return this.duelistsCache;
+        }
         let duelists: Duelist[] = duelistsData.map(x => new Duelist(x));
         duelists = _.orderBy(duelists, x => x.DuelistId);
+        this.duelistsCache = duelists;
         return duelists;
     }
 
@@ -31,11 +48,15 @@ export class DataUtils {
     }
 
     static getDrops(): Drop[] {
+        if (this.dropsCache) {
+            return this.dropsCache;
+        }
         const drops: Drop[] = dropsData.map(x => new Drop(x));
         for (const drop of drops) {
             drop.duelist = this.getDuelistFromId(drop.DuelistId);
             drop.card = this.getCardFromId(drop.CardId);
         }
+        this.dropsCache = drops;
         return drops;
     }
 
@@ -64,11 +85,15 @@ export class DataUtils {
     }
 
     static getEquipInfos(): EquipInfo[] {
+        if (this.equipInfoCache) {
+            return this.equipInfoCache;
+        }
         const equipinfos: EquipInfo[] = equipinfoData.map(x => new EquipInfo(x));
         for (const equipinfo of equipinfos) {
             equipinfo.equip = this.getCardFromId(equipinfo.EquipId);
             equipinfo.card = this.getCardFromId(equipinfo.CardId);
         }
+        this.equipInfoCache = equipinfos;
         return equipinfos;
     }
 

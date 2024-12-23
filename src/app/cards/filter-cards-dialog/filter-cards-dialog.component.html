@@ -1,0 +1,28 @@
+<div class="flex flex-col" cdkDrag cdkDragRootElement=".cdk-overlay-pane">
+
+    <mat-toolbar class="flex flex-row items-center justify-between !pl-4 !pr-2 bg-primary" cdkDragHandle>
+        <div class="text-lg text-white">
+            Filter cards
+        </div>
+        <button mat-icon-button (click)="cancel()">
+            <mat-icon class="text-white">clear</mat-icon>
+        </button>
+    </mat-toolbar>
+
+    <div class="fm-dialog-content">
+        <mat-checkbox [(ngModel)]="data.showOnlyObtainable">Show only obtainable</mat-checkbox>
+    </div>
+
+    <div class="fm-dialog-actions">
+
+        <button mat-button (click)="cancel()">
+            Cancel
+        </button>
+
+        <button mat-flat-button (click)="confirm()">
+            Confirm
+        </button>
+
+    </div>
+
+</div>

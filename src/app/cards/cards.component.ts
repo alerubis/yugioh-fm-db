@@ -1,5 +1,5 @@
 import { DecimalPipe, NgClass } from '@angular/common';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatExpansionModule } from '@angular/material/expansion';
@@ -7,45 +7,47 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatSort, MatSortModule, Sort } from '@angular/material/sort';
+import { MatSortModule, Sort } from '@angular/material/sort';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, ParamMap, RouterLink } from '@angular/router';
 import _ from 'lodash';
 import { debounceTime } from 'rxjs';
-import { DataUtils } from '../../shared/data-utils';
-import { Card, Drop, EquipInfo } from '../../shared/types';
-import { CardComponent } from '../card/card.component';
-import {MatProgressBarModule} from '@angular/material/progress-bar';
+import { DataUtils } from '../shared/data-utils';
+import { Card, Drop, EquipInfo } from '../shared/types';
+import { MatDialog } from '@angular/material/dialog';
+import { FilterCardsDialogComponent, FilterCardsDialogData } from './filter-cards-dialog/filter-cards-dialog.component';
 
 @Component({
     selector: 'app-cards',
     standalone: true,
     imports: [
         DecimalPipe,
-        MatFormFieldModule,
         MatButtonModule,
+        MatExpansionModule,
+        MatFormFieldModule,
         MatIconModule,
         MatInputModule,
-        MatSortModule,
-        RouterLink,
-        ReactiveFormsModule,
-        NgClass,
         MatMenuModule,
-        MatSidenavModule,
-        CardComponent,
-        MatExpansionModule,
         MatProgressBarModule,
+        MatSidenavModule,
+        MatSortModule,
+        ReactiveFormsModule,
+        RouterLink,
+        NgClass,
     ],
     templateUrl: './cards.component.html'
 })
 export class CardsComponent implements OnInit {
 
-    @ViewChild(MatSort) matSort: MatSort | undefined;
-    filterControl = new FormControl();
-
     allCards: Card[] = DataUtils.getCards();
     cards: Card[] = this.allCards;
+
+    filterControl = new FormControl();
+    sortActive: string = 'CardId';
+    sortDirection: 'asc' | 'desc' = 'asc';
+    filterData = new FilterCardsDialogData();
 
     selectedCard: Card | undefined;
     drops: Drop[] = [];
@@ -56,6 +58,7 @@ export class CardsComponent implements OnInit {
 
     constructor(
         private _activatedRoute: ActivatedRoute,
+        private _matDialog: MatDialog,
         private titleService: Title,
     ) {
         this.titleService.setTitle('Cards - Yu-Gi-Oh! Forbidden Memories Database');
@@ -67,6 +70,7 @@ export class CardsComponent implements OnInit {
             if (cardId) {
                 this.selectedCard = DataUtils.getCardFromId(params.get('id'));
                 this.titleService.setTitle((this.selectedCard?.getFullName() || '?') + ' - Cards - Yu-Gi-Oh! Forbidden Memories Database');
+                document.getElementsByClassName('mat-drawer-inner-container')[0].scrollTo(0, 0)
                 this.loading = true;
                 this.drops = [];
                 this.opponentsDecks = [];
@@ -78,7 +82,7 @@ export class CardsComponent implements OnInit {
                     this.equips = DataUtils.getEquipInfosForCard(cardId);
                     this.equipsInverse = DataUtils.getEquipInfosForCardInverse(cardId);
                     this.loading = false;
-                }, 400);
+                }, 0);
             } else {
                 this.selectedCard = undefined;
             }
@@ -87,19 +91,50 @@ export class CardsComponent implements OnInit {
         this.filterControl.valueChanges
             .pipe(debounceTime(200))
             .subscribe(value => {
-                this.filterCards();
+                this.filterAndSortCards();
             });
     }
 
-    filterCards(): void {
+    filterAndSortCards(): void {
         let filteredCards = this.allCards;
         if (this.filterControl && this.filterControl.value) {
             filteredCards = filteredCards.filter(x => x.CardName.toLowerCase().includes(this.filterControl.value.toLowerCase()));
         }
-        if (this.matSort) {
-            filteredCards = _.orderBy(filteredCards, this.matSort.active, this.matSort.direction === 'asc' ? 'asc' : 'desc');
+        if (this.sortActive) {
+            filteredCards = _.orderBy(filteredCards, this.sortActive, this.sortDirection);
         }
         this.cards = filteredCards;
+    }
+
+    handleSortChange(sort: string): void {
+        if (sort === this.sortActive) {
+            if (this.sortDirection === 'asc') {
+                this.sortDirection = 'desc';
+            } else {
+                this.sortDirection = 'asc';
+            }
+        } else {
+            if (sort === 'Attack' || sort === 'Defense') {
+                this.sortDirection = 'desc';
+            } else {
+                this.sortDirection = 'asc';
+            }
+        }
+        this.sortActive = sort;
+        this.filterAndSortCards();
+    }
+
+    openFilterCardsDialog(): void {
+        const dialogRef = this._matDialog.open(FilterCardsDialogComponent, {
+            data: this.filterData,
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+            if (result) {
+                this.filterData = result;
+                this.filterAndSortCards();
+            }
+        });
     }
 
     handleBackdropClick(): void {

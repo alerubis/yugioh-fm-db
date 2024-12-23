@@ -17,7 +17,7 @@ html {
 
 // Colors
 .bg-primary {
-    background-color: var(--mat-sys-primary);
+    background-color: var(--mat-sys-primary) !important;
 }
 
 .bg-surface {
@@ -63,7 +63,7 @@ body {
 @tailwind utilities;
 
 a {
-    @apply hover:underline;
+    @apply text-primary hover:underline;
 }
 
 // Material
@@ -80,7 +80,7 @@ a {
     @apply flex flex-row items-center justify-evenly border-t bg-slate-200 py-3;
 
     .fm-nav-item {
-        @apply flex flex-col items-center gap-1 hover:no-underline;
+        @apply flex flex-col items-center gap-1 text-slate-800 hover:no-underline;
 
         &:hover {
             .fm-nav-item-icon-container {
@@ -166,5 +166,21 @@ a {
 
     a {
         @apply text-primary;
+    }
+}
+
+
+.mat-mdc-dialog-surface {
+    overflow: hidden !important;
+    border-radius: 12px !important;
+
+    .fm-dialog-content {
+        max-height: calc(100vh - 64px - 64px);
+        overflow: auto;
+        @apply flex flex-col p-4;
+    }
+
+    .fm-dialog-actions {
+        @apply flex flex-row items-center justify-end gap-4 p-4;
     }
 }

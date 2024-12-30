@@ -1,0 +1,202 @@
+<mat-sidenav-container class="h-full" (backdropClick)="handleBackdropClick()">
+
+    <mat-sidenav-content>
+
+        <div class="flex flex-col h-full overflow-y-auto">
+
+            <!-- #region Filters -->
+            <div class="flex flex-row items-center justify-between gap-3 bg-card p-3 border-b sticky top-0 z-10">
+                <mat-form-field class="dense-form-field flex-auto" appearance="outline" subscriptSizing="dynamic">
+                    <mat-icon matPrefix>search</mat-icon>
+                    <input matInput [formControl]="filterControl" name="search" type="text" placeholder="Search...">
+                    @if (filterControl.value) {
+                        <button matSuffix mat-icon-button (click)="filterControl.setValue('')">
+                            <mat-icon>clear</mat-icon>
+                        </button>
+                    }
+                </mat-form-field>
+                <div class="flex flex-row items-center justify-end">
+                    <button mat-icon-button [matMenuTriggerFor]="menuSort">
+                        @switch (sortActive) {
+                            @case ('DuelistId') {<mat-icon class="material-symbols-outlined">123</mat-icon>}
+                            @case ('Duelist') {<mat-icon class="material-symbols-outlined">abc</mat-icon>}
+                        }
+                        <div class="absolute top-2 -right-2">
+                            @switch (sortDirection) {
+                                @case ('asc') {<mat-icon class="material-symbols-outlined rotate-180">straight</mat-icon>}
+                                @case ('desc') {<mat-icon class="material-symbols-outlined">straight</mat-icon>}
+                            }
+                        </div>
+                    </button>
+                    <mat-menu #menuSort="matMenu">
+                        <button mat-menu-item (click)="handleSortChange('DuelistId')">
+                            <mat-icon class="material-symbols-outlined">123</mat-icon>
+                            Sort by number
+                        </button>
+                        <button mat-menu-item (click)="handleSortChange('Duelist')">
+                            <mat-icon class="material-symbols-outlined">abc</mat-icon>
+                            Sort by name
+                        </button>
+                    </mat-menu>
+                </div>
+            </div>
+            <!-- #endregion -->
+
+            <!-- #region Cards list -->
+            <div class="grid grid-cols-5 gap-x-1 gap-y-6 p-3">
+                @for (duelist of duelists; track $index) {
+                    <a
+                        class="hover:scale-110 transition-all"
+                        [routerLink]="['/duelists/', duelist.DuelistId]"
+                        (click)="selectedDuelist = duelist"
+                    >
+                        <div class="flex flex-col items-center justify-center">
+                            <img [src]="duelist.getDuelitsSrc()" [alt]="duelist.DuelistId">
+                            <div class="text-xs text-center truncate max-w-full">{{ duelist.Duelist }}</div>
+                        </div>
+                    </a>
+                }
+            </div>
+            <!-- #region Cards list -->
+
+        </div>
+
+    </mat-sidenav-content>
+
+    <mat-sidenav class="!w-screen !rounded-none" [mode]="'over'" [position]="'end'" [opened]="!!selectedDuelist">
+        <div class="flex flex-col min-h-full bg-surface">
+            @if (selectedDuelist) {
+
+                <!-- #region Header -->
+                <div class="flex flex-row items-center gap-3 bg-card p-3 border-b sticky top-0 z-10">
+                    <a mat-icon-button [routerLink]="['/duelists/']" (click)="selectedDuelist = undefined">
+                        <mat-icon>arrow_back</mat-icon>
+                    </a>
+                    <img [src]="selectedDuelist.getDuelitsSrc()" [alt]="selectedDuelist.DuelistId" class="w-8 h-8">
+                    <div class="flex flex-col gap-1 flex-auto truncate leading-none">
+                        <div class="">
+                            {{ selectedDuelist.Duelist }}
+                        </div>
+                        <div class="text-secondary text-xs">
+                            Duelist
+                        </div>
+                    </div>
+                </div>
+                <!-- #endregion -->
+
+                <div class="flex flex-col px-3 py-6 gap-6">
+
+                    <div class="flex flex-col items-center justify-center gap-3">
+                        <img [src]="selectedDuelist.getDuelitsSrc()" [alt]="selectedDuelist.DuelistId">
+                        <div class="text-sm text-secondary italic text-center">
+                            bla bla?
+                        </div>
+                    </div>
+
+                    <!-- #region Drops -->
+                    <mat-expansion-panel class="fm-expansion-panel" [expanded]="true">
+                        <mat-expansion-panel-header [collapsedHeight]="'48px'" [expandedHeight]="'48px'">
+                            Drops
+                            @if (loading) {
+                                (...)
+                            } @else {
+                                ({{ drops.length }})
+                            }
+                        </mat-expansion-panel-header>
+                        @if (loading) {
+                            <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+                        } @else {
+                            <table class="fm-table" matSort [matSortActive]="'CardProbability'" [matSortDirection]="'desc'" [matSortStart]="'desc'" [matSortDisableClear]="true" (matSortChange)="sortDrops($event)">
+                                <thead>
+                                    <tr>
+                                        <th mat-sort-header="CardId" class="text-left">Card</th>
+                                        <th mat-sort-header="PoolType" class="text-left">Rank</th>
+                                        <th mat-sort-header="CardProbability" arrowPosition="before" class="text-right">%</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @for (drop of drops; track $index) {
+                                        <tr>
+                                            <td class="text-left">
+                                                <a class="flex flex-row items-center gap-1" [routerLink]="['/cards/', drop.CardId]">
+                                                    <img [src]="drop.card?.getArtworkSrc()" [alt]="drop.CardId" class="w-12 h-12">
+                                                    <div>{{ drop.card?.getFullName() }}</div>
+                                                </a>
+                                            </td>
+                                            <td class="text-left">
+                                                @switch (drop.PoolType) {
+                                                    @case ('SAPow') {
+                                                        <div class="flex flex-row items-center gap-1">
+                                                            <div>S/A</div>
+                                                            <div class="bg-red-500 text-white rounded px-1 py-0.5 text-xs">POW</div>
+                                                        </div>
+                                                    }
+                                                    @case ('SATec') {
+                                                        <div class="flex flex-row items-center gap-1">
+                                                            <div>S/A</div>
+                                                            <div class="bg-blue-500 text-white rounded px-1 py-0.5 text-xs">TEC</div>
+                                                        </div>
+                                                    }
+                                                    @case ('BCD') {
+                                                        <div class="flex flex-row items-center gap-1">
+                                                            <div>B/C/D</div>
+                                                        </div>
+                                                    }
+                                                    @default {
+                                                        {{ drop.PoolType }}
+                                                    }
+                                                }
+                                            </td>
+                                            <td class="text-right">{{ drop.getCardProbabilityPercentage() | number : '1.2-2' }}%</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        }
+                    </mat-expansion-panel>
+                    <!-- #endregion -->
+
+                    <!-- #region Decks -->
+                    <mat-expansion-panel class="fm-expansion-panel" [expanded]="true">
+                        <mat-expansion-panel-header [collapsedHeight]="'48px'" [expandedHeight]="'48px'">
+                            Deck
+                            @if (loading) {
+                                (...)
+                            } @else {
+                                ({{ decks.length }})
+                            }
+                        </mat-expansion-panel-header>
+                        @if (loading) {
+                            <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+                        } @else {
+                            <table class="fm-table" matSort [matSortActive]="'CardProbability'" [matSortDirection]="'desc'" [matSortStart]="'desc'" [matSortDisableClear]="true" (matSortChange)="sortDecks($event)">
+                                <thead>
+                                    <tr>
+                                        <th mat-sort-header="CardId" class="text-left">Card</th>
+                                        <th mat-sort-header="CardProbability" arrowPosition="before" class="text-right">%</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @for (deck of decks; track $index) {
+                                        <tr>
+                                            <td class="text-left">
+                                                <a class="flex flex-row items-center gap-1" [routerLink]="['/cards/', deck.CardId]">
+                                                    <img [src]="deck.card?.getArtworkSrc()" [alt]="deck.CardId" class="w-12 h-12">
+                                                    <div>{{ deck.card?.getFullName() }}</div>
+                                                </a>
+                                            </td>
+                                            <td class="text-right">{{ deck.getCardProbabilityPercentage() | number : '1.2-2' }}%</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        }
+                    </mat-expansion-panel>
+                    <!-- #endregion -->
+
+                </div>
+            }
+        </div>
+    </mat-sidenav>
+
+</mat-sidenav-container>

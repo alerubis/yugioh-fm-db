@@ -1,14 +1,15 @@
 import { Routes } from '@angular/router';
-import { DuelistComponent } from './duelist/duelist.component';
-import { DuelistsComponent } from './duelists/duelists.component';
+import { DuelistsComponent } from './duelists.component';
 
 export const routes: Routes = [
     {
         path: '',
         component: DuelistsComponent,
+        data: { shouldReuse: true },
     },
     {
         path: ':id',
-        component: DuelistComponent,
+        component: DuelistsComponent,
+        data: { shouldReuse: true },
     }
 ];

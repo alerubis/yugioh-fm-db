@@ -1,0 +1,100 @@
+<div class="flex flex-col h-full overflow-y-auto">
+
+    <div class="flex flex-col">
+
+        <div class="flex flex-row items-center justify-between bg-card p-3 border-b">
+            Select up to 5 cards
+            <div class="flex flex-row items-center justify-end">
+                <button mat-icon-button (click)="randomize()">
+                    <mat-icon>auto_awesome</mat-icon>
+                </button>
+                <button mat-icon-button (click)="reset()" [disabled]="selectedCards.length === 0">
+                    <mat-icon>delete</mat-icon>
+                </button>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-5 gap-1 p-3">
+            @for (index of [0, 1, 2, 3, 4]; track $index) {
+                <a (click)="handleCardClick(index)">
+                    @if (selectedCards[index]) {
+                        <img [src]="selectedCards[index].getCardSrc()" [alt]="selectedCards[index].CardId">
+                    } @else {
+                        <div class="flex flex-col items-center justify-center max-w-[140px] max-h-[212px] w-full aspect-[140/212] bg-gray-300 border-2 border-gray-400 border-dashed rounded">
+                            <mat-icon>add</mat-icon>
+                        </div>
+                    }
+                </a>
+            }
+        </div>
+
+    </div>
+
+    <div class="flex flex-col">
+
+        <div class="flex flex-row items-center justify-between bg-card p-3 border-t border-b">
+            Possible fusions ({{ possibleFusions.length }})
+            <div class="flex flex-row items-center justify-end">
+                <!--
+                <button mat-icon-button (click)="showIntermediateFusions = !showIntermediateFusions">
+                    @if (showIntermediateFusions) {
+                        <mat-icon>code_off</mat-icon>
+                    } @else {
+                        <mat-icon>code</mat-icon>
+                    }
+                </button>
+                -->
+            </div>
+        </div>
+
+        <div class="flex flex-col px-3 pb-6">
+            @for (fusion of possibleFusions; track $index) {
+                <div class="flex flex-row gap-1 pt-6 overflow-x-auto">
+                    @for (material of fusion.materials; track $index; let index = $index) {
+                        <div class="relative flex flex-col items-center justify-center min-w-16">
+                            <img [src]="material.getCardSrc()" [alt]="material.CardId">
+                            <div class="flex flex-col items-center justify-center absolute -top-4 left-0.5 w-5 h-4 z-10 bg-gray-800 text-white text-xs rounded-t">
+                                {{ index + 1 }}
+                            </div>
+                        </div>
+                    }
+                    <div class="flex flex-col items-center justify-center w-10">
+                        <mat-icon>arrow_forward</mat-icon>
+                    </div>
+                    <div class="flex flex-col items-center justify-center min-w-16">
+                        <img [src]="fusion.getLastResult().getCardSrc()" [alt]="fusion.getLastResult().CardId">
+                    </div>
+                </div>
+            }
+        </div>
+
+        @if (countSelectedCards() < 2) {
+
+            <div class="flex flex-col items-center justify-center p-6">
+                <div class="text-center">
+                    Selected cards: {{ countSelectedCards() }}
+                </div>
+                <div class="text-gray-500 text-sm text-center">
+                    Select at least 2 cards to see how they can fuse.
+                </div>
+            </div>
+
+        } @else if (possibleFusions.length === 0) {
+
+            <div class="flex flex-col items-center justify-center p-6">
+                <div class="text-gray-500 text-7xl mb-6">
+                    :(
+                </div>
+                <div class="text-center">
+                    No fusions found.
+                </div>
+                <div class="text-gray-500 text-sm text-center">
+                    The selected cards cannot be fused.
+                </div>
+            </div>
+
+        }
+
+    </div>
+
+</div>

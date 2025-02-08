@@ -1,16 +1,15 @@
-import { MediaMatcher } from '@angular/cdk/layout';
-import { NgClass } from '@angular/common';
-import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatSidenavContent, MatSidenavModule } from '@angular/material/sidenav';
-import { MatToolbar } from '@angular/material/toolbar';
-import { NavigationEnd, Router, RouterModule } from '@angular/router';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { RouterModule } from '@angular/router';
 
 export interface NavigationItem {
     title: string;
     icon: string;
     url: string;
+    children?: NavigationItem[];
 }
 
 @Component({
@@ -19,19 +18,14 @@ export interface NavigationItem {
         MatButtonModule,
         MatIconModule,
         MatSidenavModule,
-        MatToolbar,
+        MatMenuModule,
         RouterModule,
-        NgClass,
     ],
     templateUrl: './app.component.html',
 })
 export class AppComponent implements OnInit, OnDestroy {
 
-    constructor(
-        private _changeDetectorRef: ChangeDetectorRef,
-        private _media: MediaMatcher,
-        private _router: Router,
-    ) {
+    constructor() {
     }
 
     ngOnInit(): void {
@@ -58,14 +52,14 @@ export class AppComponent implements OnInit, OnDestroy {
         },
         {
             title: 'Fusions',
-            icon: 'chevron_left',
+            icon: 'combine_columns',
             url: 'fusions'
         },
         {
-            title: 'Other',
-            icon: 'menu',
-            url: 'other'
-        }
+            title: 'About',
+            icon: 'info',
+            url: 'about'
+        },
     ];
 
 }

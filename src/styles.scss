@@ -92,6 +92,10 @@ a {
             .fm-nav-item-icon-container {
                 @apply bg-primary text-white;
             }
+
+            .fm-nav-item-title {
+                @apply font-bold;
+            }
         }
 
         .fm-nav-item-icon-container {

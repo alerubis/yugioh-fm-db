@@ -2,8 +2,8 @@ const fs = require('fs');
 const path = require('path');
 const sharp = require('sharp');
 
-const inputDir = path.join(__dirname, '../assets/images/detail/it'); // La cartella di input delle immagini
-const outputDir = path.join(__dirname, '../assets/images/card/it'); // La cartella di output
+const inputDir = path.join(__dirname, '../assets/images/cards/detail/eu'); // La cartella di input delle immagini
+const outputDir = path.join(__dirname, '../assets/images/cards/card/eu'); // La cartella di output
 
 // Crea la cartella di output se non esiste
 if (!fs.existsSync(outputDir)) {

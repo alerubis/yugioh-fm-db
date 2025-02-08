@@ -3,7 +3,8 @@ import cardsData from '../../assets/data/cards.json';
 import dropsData from '../../assets/data/drops.json';
 import duelistsData from '../../assets/data/duelists.json';
 import equipinfoData from '../../assets/data/equipinfo.json';
-import { Card, Drop, Duelist, EquipInfo } from './types';
+import fusionsData from '../../assets/data/fusions.json';
+import { Card, Drop, Duelist, EquipInfo, Fusion } from './types';
 
 export class DataUtils {
 
@@ -11,6 +12,7 @@ export class DataUtils {
     static duelistsCache: Duelist[] | undefined;
     static dropsCache: Drop[] | undefined;
     static equipInfoCache: EquipInfo[] | undefined;
+    static fusionsCache: Fusion[] | undefined;
 
     static getCards(): Card[] {
         if (this.cardsCache) {
@@ -107,6 +109,20 @@ export class DataUtils {
         let equipinfos = this.getEquipInfos().filter(x => x.EquipId == EquipId);
         equipinfos = _.orderBy(equipinfos, x => x.card?.Attack, 'desc');
         return equipinfos;
+    }
+
+    static getFusions(): Fusion[] {
+        if (this.fusionsCache) {
+            return this.fusionsCache;
+        }
+        const fusions: Fusion[] = fusionsData.map(x => new Fusion(x));
+        for (const fusion of fusions) {
+            fusion.cardMaterial1 = this.getCardFromId(fusion.Material1);
+            fusion.cardMaterial2 = this.getCardFromId(fusion.Material2);
+            fusion.cardResult = this.getCardFromId(fusion.Result);
+        }
+        this.fusionsCache = fusions;
+        return fusions;
     }
 
 }

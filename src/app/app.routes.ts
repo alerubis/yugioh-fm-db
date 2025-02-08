@@ -4,12 +4,24 @@ export const initialRoute: string = 'home';
 
 export const routes: Routes = [
     {
+        path: 'home',
+        loadChildren: () => import('./home/home.routes').then(m => m.routes),
+    },
+    {
         path: 'cards',
         loadChildren: () => import('./cards/cards.routes').then(m => m.routes),
     },
     {
         path: 'duelists',
         loadChildren: () => import('./duelists/duelists.routes').then(m => m.routes),
+    },
+    {
+        path: 'fusions',
+        loadChildren: () => import('./fusions/fusions.routes').then(m => m.routes),
+    },
+    {
+        path: 'about',
+        loadChildren: () => import('./about/about.routes').then(m => m.routes),
     },
     {
         path: '',

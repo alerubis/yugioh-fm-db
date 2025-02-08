@@ -54,7 +54,7 @@ export class Card {
     getCardSrc(): string {
         let src = '';
         if (this.CardId) {
-            src = 'assets/images/cards/card/it/' + this.CardId.toString().padStart(3, '0') + '.png';
+            src = 'assets/images/cards/card/eu/' + this.CardId.toString().padStart(3, '0') + '.png';
         }
         return src;
     }
@@ -62,7 +62,7 @@ export class Card {
     getDetailSrc(): string {
         let src = '';
         if (this.CardId) {
-            src = 'assets/images/cards/detail/it/' + this.CardId.toString().padStart(3, '0') + '.png';
+            src = 'assets/images/cards/detail/eu/' + this.CardId.toString().padStart(3, '0') + '.png';
         }
         return src;
     }
@@ -166,6 +166,46 @@ export class EquipInfo {
         this.EquipCardId = value.EquipCardId;
         this.EquipId = value.EquipId;
         this.CardId = value.CardId;
+    }
+
+}
+
+export class Fusion {
+
+    FusionCardId: number;
+    Material1: number;
+    Material2: number;
+    Result: number;
+
+    private _cardMaterial1: Card | undefined;
+    public get cardMaterial1(): Card | undefined {
+        return this._cardMaterial1;
+    }
+    public set cardMaterial1(value: Card | undefined) {
+        this._cardMaterial1 = value;
+    }
+
+    private _cardMaterial2: Card | undefined;
+    public get cardMaterial2(): Card | undefined {
+        return this._cardMaterial2;
+    }
+    public set cardMaterial2(value: Card | undefined) {
+        this._cardMaterial2 = value;
+    }
+
+    private _cardResult: Card | undefined;
+    public get cardResult(): Card | undefined {
+        return this._cardResult;
+    }
+    public set cardResult(value: Card | undefined) {
+        this._cardResult = value;
+    }
+
+    constructor(value: any) {
+        this.FusionCardId = value.FusionCardId;
+        this.Material1 = value.Material1;
+        this.Material2 = value.Material2;
+        this.Result = value.Result;
     }
 
 }

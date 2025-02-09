@@ -75,6 +75,15 @@ a {
     }
 }
 
+// Material
+.ultra-dense-form-field {
+    @include mat.form-field-density(-5);
+
+    .mat-mdc-form-field-icon-prefix {
+        padding-right: 0;
+    }
+}
+
 // FM
 .fm-nav {
     @apply flex flex-row items-center justify-evenly border-t bg-slate-200 py-3;

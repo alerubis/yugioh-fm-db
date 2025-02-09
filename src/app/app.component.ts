@@ -56,7 +56,7 @@ export class AppComponent implements OnInit, OnDestroy {
             url: 'fusions'
         },
         {
-            title: 'About',
+            title: 'Deck',
             icon: 'info',
             url: 'about'
         },

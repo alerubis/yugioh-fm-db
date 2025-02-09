@@ -10,10 +10,10 @@
     </mat-toolbar>
 
     <div class="fm-dialog-content">
-        <mat-checkbox [(ngModel)]="data.showOnlyObtainable">
+        <mat-checkbox [(ngModel)]="data.grayOutUnobtainableCards">
             Gray out unobtainable cards
         </mat-checkbox>
-        <mat-checkbox>
+        <mat-checkbox [(ngModel)]="data.groupByActiveSort">
             Group by active sort
         </mat-checkbox>
         filter by card type

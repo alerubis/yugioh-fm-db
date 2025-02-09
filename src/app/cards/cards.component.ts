@@ -1,7 +1,8 @@
-import { DecimalPipe, NgClass } from '@angular/common';
+import { DecimalPipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDialog } from '@angular/material/dialog';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -13,11 +14,9 @@ import { MatSortModule, Sort } from '@angular/material/sort';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, ParamMap, RouterLink } from '@angular/router';
 import _ from 'lodash';
-import { debounceTime } from 'rxjs';
 import { DataUtils } from '../shared/data-utils';
 import { Card, Drop, EquipInfo } from '../shared/types';
-import { MatDialog } from '@angular/material/dialog';
-import { FilterCardsDialogComponent, FilterCardsDialogData } from './filter-cards-dialog/filter-cards-dialog.component';
+import { CardsListComponent } from './cards-list/cards-list.component';
 
 @Component({
     selector: 'app-cards',
@@ -35,19 +34,11 @@ import { FilterCardsDialogComponent, FilterCardsDialogData } from './filter-card
         MatSortModule,
         ReactiveFormsModule,
         RouterLink,
-        NgClass,
+        CardsListComponent,
     ],
     templateUrl: './cards.component.html'
 })
 export class CardsComponent implements OnInit {
-
-    allCards: Card[] = DataUtils.getCards();
-    cards: Card[] = this.allCards;
-
-    filterControl = new FormControl();
-    sortActive: string = 'CardId';
-    sortDirection: 'asc' | 'desc' = 'asc';
-    filterData = new FilterCardsDialogData();
 
     selectedCard: Card | undefined;
     drops: Drop[] = [];
@@ -85,54 +76,7 @@ export class CardsComponent implements OnInit {
                 }, 0);
             } else {
                 this.selectedCard = undefined;
-            }
-        });
-
-        this.filterControl.valueChanges
-            .pipe(debounceTime(200))
-            .subscribe(value => {
-                this.filterAndSortCards();
-            });
-    }
-
-    filterAndSortCards(): void {
-        let filteredCards = this.allCards;
-        if (this.filterControl && this.filterControl.value) {
-            filteredCards = filteredCards.filter(x => x.CardName.toLowerCase().includes(this.filterControl.value.toLowerCase()));
-        }
-        if (this.sortActive) {
-            filteredCards = _.orderBy(filteredCards, this.sortActive, this.sortDirection);
-        }
-        this.cards = filteredCards;
-    }
-
-    handleSortChange(sort: string): void {
-        if (sort === this.sortActive) {
-            if (this.sortDirection === 'asc') {
-                this.sortDirection = 'desc';
-            } else {
-                this.sortDirection = 'asc';
-            }
-        } else {
-            if (sort === 'Attack' || sort === 'Defense') {
-                this.sortDirection = 'desc';
-            } else {
-                this.sortDirection = 'asc';
-            }
-        }
-        this.sortActive = sort;
-        this.filterAndSortCards();
-    }
-
-    openFilterCardsDialog(): void {
-        const dialogRef = this._matDialog.open(FilterCardsDialogComponent, {
-            data: this.filterData,
-        });
-
-        dialogRef.afterClosed().subscribe(result => {
-            if (result) {
-                this.filterData = result;
-                this.filterAndSortCards();
+                this.titleService.setTitle('Cards - Yu-Gi-Oh! Forbidden Memories Database');
             }
         });
     }

@@ -8,10 +8,12 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
 
 export class FilterCardsDialogData {
-    showOnlyObtainable: boolean;
+    grayOutUnobtainableCards: boolean;
+    groupByActiveSort: boolean;
 
     constructor(value?: any) {
-        this.showOnlyObtainable = value?.showOnlyObtainable || false;
+        this.grayOutUnobtainableCards = value?.grayOutUnobtainableCards || false;
+        this.groupByActiveSort = value?.groupByActiveSort || false;
     }
 }
 

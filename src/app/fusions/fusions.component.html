@@ -26,6 +26,12 @@
                     }
                 </a>
             }
+            @for (index of [0, 1, 2, 3, 4]; track $index) {
+                <mat-form-field class="ultra-dense-form-field" appearance="outline" subscriptSizing="dynamic">
+                    <div matPrefix class="text-sm text-gray-500 px-1">#</div>
+                    <input matInput [formControl]="selectedCardsIds[index]" type="number" min="1" max="722">
+                </mat-form-field>
+            }
         </div>
 
     </div>
@@ -35,7 +41,6 @@
         <div class="flex flex-row items-center justify-between bg-card p-3 border-t border-b">
             Possible fusions ({{ possibleFusions.length }})
             <div class="flex flex-row items-center justify-end">
-                <!--
                 <button mat-icon-button (click)="showIntermediateFusions = !showIntermediateFusions">
                     @if (showIntermediateFusions) {
                         <mat-icon>code_off</mat-icon>
@@ -43,7 +48,6 @@
                         <mat-icon>code</mat-icon>
                     }
                 </button>
-                -->
             </div>
         </div>
 
@@ -51,6 +55,11 @@
             @for (fusion of possibleFusions; track $index) {
                 <div class="flex flex-row gap-1 pt-6 overflow-x-auto">
                     @for (material of fusion.materials; track $index; let index = $index) {
+                        @if (showIntermediateFusions && index >= 2) {
+                            <div class="flex flex-col items-center justify-center min-w-16">
+                                <img [src]="fusion.results[index - 2].getCardSrc()" [alt]="fusion.results[index - 2].CardId">
+                            </div>
+                        }
                         <div class="relative flex flex-col items-center justify-center min-w-16">
                             <img [src]="material.getCardSrc()" [alt]="material.CardId">
                             <div class="flex flex-col items-center justify-center absolute -top-4 left-0.5 w-5 h-4 z-10 bg-gray-800 text-white text-xs rounded-t">

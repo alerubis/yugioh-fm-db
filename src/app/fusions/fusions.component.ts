@@ -7,6 +7,10 @@ import { DataUtils } from '../shared/data-utils';
 import { Card, Fusion } from '../shared/types';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { SearchCardDialogComponent } from '../cards/search-card-dialog/search-card-dialog.component';
 
 export class PossibleFusion {
     materials: Card[] = [];
@@ -25,13 +29,17 @@ export class PossibleFusion {
         MatButtonModule,
         MatCheckboxModule,
         MatIconModule,
+        MatFormFieldModule,
+        MatInputModule,
+        ReactiveFormsModule,
     ],
     templateUrl: './fusions.component.html'
 })
 export class FusionsComponent {
 
     allCards: Card[] = DataUtils.getCards();
-    selectedCards: Card[] = [];
+    selectedCards: (Card | null)[] = [null, null, null, null, null];
+    selectedCardsIds: FormControl[] = [new FormControl(), new FormControl(), new FormControl(), new FormControl(), new FormControl()];
     allFusions: Fusion[] = DataUtils.getFusions();
     possibleFusions: PossibleFusion[] = [];
     showIntermediateFusions = false;
@@ -41,11 +49,26 @@ export class FusionsComponent {
         private titleService: Title,
     ) {
         this.titleService.setTitle('Fusions - Yu-Gi-Oh! Forbidden Memories Database');
-        this.loadPossibleFusions();
+        for (const formControl of this.selectedCardsIds) {
+            formControl.valueChanges
+                .subscribe(value => {
+                    const card = DataUtils.getCardFromId(value);
+                    if (card) {
+                        this.selectedCards[this.selectedCardsIds.indexOf(formControl)] = card;
+                        this.loadPossibleFusions();
+                    } else {
+                        this.selectedCards[this.selectedCardsIds.indexOf(formControl)] = null;
+                        this.loadPossibleFusions();
+                    }
+                });
+        }
     }
 
     reset(): void {
         this.selectedCards = [];
+        for (const formControl of this.selectedCardsIds) {
+            formControl.setValue('');
+        }
         this.possibleFusions = [];
     }
 
@@ -58,11 +81,13 @@ export class FusionsComponent {
     }
 
     handleCardClick(index: number): void {
-        const randomCard = _.sample(this.allCards);
-        if (randomCard) {
-            this.selectedCards[index] = randomCard;
-        }
-        this.loadPossibleFusions();
+        this._matDialog.open(SearchCardDialogComponent).afterClosed().subscribe((card: Card) => {
+            if (card) {
+                this.selectedCards[index] = card;
+                this.selectedCardsIds[index].setValue(card.getCardIdAsString());
+                this.loadPossibleFusions();
+            }
+        });
     }
 
     countSelectedCards(): number {
@@ -72,7 +97,7 @@ export class FusionsComponent {
     // TODO make it recursive lazy mf!
     loadPossibleFusions() {
         this.possibleFusions = [];
-        const cardsToCheck = _.uniqBy(this.selectedCards, x => x.CardId);
+        const cardsToCheck: Card[] = _.uniqBy(this.selectedCards.filter(x => x), x => x!.CardId) as Card[];
         for (const card1 of cardsToCheck) {
             const remainingCards1 = cardsToCheck.filter(x => x.CardId !== card1.CardId);
             for (const card2 of remainingCards1) {

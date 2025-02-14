@@ -117,6 +117,30 @@ a {
     }
 }
 
+.fm-sidenav {
+    @apply flex flex-col gap-2 p-3;
+
+    .fm-sidenav-item {
+        @apply flex flex-row items-center gap-3 text-slate-800 hover:no-underline rounded-full p-4;
+
+        &:hover {
+            @apply bg-slate-300;
+        }
+
+        &.active {
+            @apply bg-primary text-white;
+
+            .fm-sidenav-item-title {
+                @apply font-bold text-white;
+            }
+        }
+
+        .fm-sidenav-item-title {
+            @apply text-gray-600;
+        }
+    }
+}
+
 .fm-card {
     @apply bg-card rounded shadow;
 
@@ -182,6 +206,9 @@ a {
     }
 }
 
+.fm-toolbar {
+    @apply bg-card min-h-20 h-20 p-3 md:px-6 border-b;
+}
 
 .mat-mdc-dialog-surface {
     overflow: hidden !important;
@@ -196,4 +223,10 @@ a {
     .fm-dialog-actions {
         @apply flex flex-row items-center justify-end gap-4 p-4;
     }
+}
+
+.icon-96 {
+    width: 96px !important;
+    height: 96px !important;
+    font-size: 96px !important;
 }

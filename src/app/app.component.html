@@ -1,41 +1,49 @@
-<div class="flex flex-col h-full">
+<mat-sidenav-container class="w-full h-full">
 
-    <div class="router-outlet-container">
-        <router-outlet></router-outlet>
-    </div>
+    <mat-sidenav mode="side" opened class="!bg-slate-200 !w-80" [opened]="!mobileService.isMobile()">
 
-    <div class="fm-nav">
-        @for (item of navigation; track $index) {
-            @if (item.children) {
-                <a class="fm-nav-item" [matMenuTriggerFor]="subNavigation">
-                    <div class="fm-nav-item-icon-container">
-                        <mat-icon>{{ item.icon }}</mat-icon>
-                    </div>
-                    <div class="fm-nav-item-title">
-                        {{ item.title }}
-                    </div>
-                </a>
-                <mat-menu #subNavigation="matMenu">
-                    @for (child of item.children; track $index) {
-                        <a mat-menu-item [routerLink]="child.url" [routerLinkActive]="['active']">
-                            <mat-icon>{{ child.icon }}</mat-icon>
-                            <span>{{ child.title }}</span>
-                        </a>
-                    }
-                </mat-menu>
-            } @else {
-                <a class="fm-nav-item"
+        <div class="fm-sidenav">
+            @for (item of navigation; track $index) {
+                <a class="fm-sidenav-item"
                     [routerLink]="item.url"
                     [routerLinkActive]="['active']">
-                    <div class="fm-nav-item-icon-container">
-                        <mat-icon class="material-symbols-outlined">{{ item.icon }}</mat-icon>
-                    </div>
-                    <div class="fm-nav-item-title">
+                    <mat-icon class="material-symbols-outlined">{{ item.icon }}</mat-icon>
+                    <div class="fm-sidenav-item-title">
                         {{ item.title }}
                     </div>
                 </a>
             }
-        }
-    </div>
+        </div>
 
-</div>
+    </mat-sidenav>
+
+    <mat-sidenav-content>
+
+        <div class="flex flex-col h-full">
+
+            <div class="router-outlet-container">
+                <router-outlet></router-outlet>
+            </div>
+
+            @if (mobileService.isMobile()) {
+                <div class="fm-nav">
+                    @for (item of navigation; track $index) {
+                        <a class="fm-nav-item"
+                            [routerLink]="item.url"
+                            [routerLinkActive]="['active']">
+                            <div class="fm-nav-item-icon-container">
+                                <mat-icon class="material-symbols-outlined">{{ item.icon }}</mat-icon>
+                            </div>
+                            <div class="fm-nav-item-title">
+                                {{ item.title }}
+                            </div>
+                        </a>
+                    }
+                </div>
+            }
+
+        </div>
+
+    </mat-sidenav-content>
+
+</mat-sidenav-container>

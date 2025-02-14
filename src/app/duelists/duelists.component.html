@@ -1,6 +1,6 @@
-<mat-sidenav-container class="h-full" (backdropClick)="handleBackdropClick()">
+<mat-drawer-container class="h-full" (backdropClick)="handleBackdropClick()">
 
-    <mat-sidenav-content>
+    <mat-drawer-content>
 
         <div class="flex flex-col h-full overflow-y-auto">
 
@@ -61,10 +61,10 @@
 
         </div>
 
-    </mat-sidenav-content>
+    </mat-drawer-content>
 
-    <mat-sidenav class="!w-screen !rounded-none" [mode]="'over'" [position]="'end'" [opened]="!!selectedDuelist">
-        <div class="flex flex-col min-h-full bg-surface">
+    <mat-drawer class="!w-full !rounded-none" [mode]="'over'" [position]="'end'" [opened]="!!selectedDuelist">
+        <div class="flex flex-col min-h-full">
             @if (selectedDuelist) {
 
                 <!-- #region Header -->
@@ -197,6 +197,6 @@
                 </div>
             }
         </div>
-    </mat-sidenav>
+    </mat-drawer>
 
-</mat-sidenav-container>
+</mat-drawer-container>

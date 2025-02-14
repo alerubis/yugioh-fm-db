@@ -81,7 +81,10 @@ export class FusionsComponent {
     }
 
     handleCardClick(index: number): void {
-        this._matDialog.open(SearchCardDialogComponent).afterClosed().subscribe((card: Card) => {
+        this._matDialog.open(SearchCardDialogComponent, {
+            width: '100vw',
+            maxWidth: '1280px',
+        }).afterClosed().subscribe((card: Card) => {
             if (card) {
                 this.selectedCards[index] = card;
                 this.selectedCardsIds[index].setValue(card.getCardIdAsString());
@@ -97,34 +100,39 @@ export class FusionsComponent {
     // TODO make it recursive lazy mf!
     loadPossibleFusions() {
         this.possibleFusions = [];
-        const cardsToCheck: Card[] = _.uniqBy(this.selectedCards.filter(x => x), x => x!.CardId) as Card[];
-        for (const card1 of cardsToCheck) {
-            const remainingCards1 = cardsToCheck.filter(x => x.CardId !== card1.CardId);
-            for (const card2 of remainingCards1) {
-                const fusion1 = this.allFusions.find(x => x.Material1 === card1.CardId && x.Material2 === card2.CardId);
+        const cardsToCheck: Card[] = this.selectedCards.filter(x => x) as Card[];
+        for (let i1 = 0; i1 < cardsToCheck.length; i1++) {
+            const card1 = cardsToCheck[i1];
+            const remainingCards1 = cardsToCheck.filter((card, index) => index !== i1);
+            for (let i2 = 0; i2 < remainingCards1.length; i2++) {
+                const card2 = remainingCards1[i2];
+                const fusion1 = this.allFusions.find(x => x.Material1 === card1.CardId && x.Material2 === card2.CardId || x.Material1 === card2.CardId && x.Material2 === card1.CardId);
                 if (fusion1 && fusion1.cardResult) {
                     const possibleFusion1 = new PossibleFusion();
                     possibleFusion1.materials = [card1, card2];
                     possibleFusion1.results = [fusion1.cardResult];
                     this.possibleFusions.push(possibleFusion1);
-                    const remainingCards2 = remainingCards1.filter(x => x.CardId !== card2.CardId);
-                    for (const card3 of remainingCards2) {
+                    const remainingCards2 = remainingCards1.filter((card, index) => index !== i2);
+                    for (let i3 = 0; i3 < remainingCards2.length; i3++) {
+                        const card3 = remainingCards2[i3];
                         const fusion2 = this.allFusions.find(x => x.Material1 === fusion1.cardResult?.CardId && x.Material2 === card3.CardId || x.Material1 === card3.CardId && x.Material2 === fusion1.cardResult?.CardId);
                         if (fusion2 && fusion2.cardResult) {
                             const possibleFusion2 = new PossibleFusion();
                             possibleFusion2.materials = [card1, card2, card3];
                             possibleFusion2.results = [fusion1.cardResult, fusion2.cardResult];
                             this.possibleFusions.push(possibleFusion2);
-                            const remainingCards3 = remainingCards2.filter(x => x.CardId !== card3.CardId);
-                            for (const card4 of remainingCards3) {
+                            const remainingCards3 = remainingCards2.filter((card, index) => index !== i3);
+                            for (let i4 = 0; i4 < remainingCards3.length; i4++) {
+                                const card4 = remainingCards3[i4];
                                 const fusion3 = this.allFusions.find(x => x.Material1 === fusion2.cardResult?.CardId && x.Material2 === card4.CardId || x.Material1 === card4.CardId && x.Material2 === fusion2.cardResult?.CardId);
                                 if (fusion3 && fusion3.cardResult) {
                                     const possibleFusion3 = new PossibleFusion();
                                     possibleFusion3.materials = [card1, card2, card3, card4];
                                     possibleFusion3.results = [fusion1.cardResult, fusion2.cardResult, fusion3.cardResult];
                                     this.possibleFusions.push(possibleFusion3);
-                                    const remainingCards4 = remainingCards3.filter(x => x.CardId !== card4.CardId);
-                                    for (const card5 of remainingCards4) {
+                                    const remainingCards4 = remainingCards3.filter((card, index) => index !== i4);
+                                    for (let i5 = 0; i5 < remainingCards4.length; i5++) {
+                                        const card5 = remainingCards4[i5];
                                         const fusion4 = this.allFusions.find(x => x.Material1 === fusion3.cardResult?.CardId && x.Material2 === card5.CardId || x.Material1 === card5.CardId && x.Material2 === fusion3.cardResult?.CardId);
                                         if (fusion4 && fusion4.cardResult) {
                                             const possibleFusion4 = new PossibleFusion();
@@ -140,14 +148,35 @@ export class FusionsComponent {
                 }
             }
         }
+        this.possibleFusions = _.uniqWith(this.possibleFusions, (a, b) => {
+            const a1 = a.materials[0]?.CardId + '-' + a.materials[1]?.CardId + '-' + a.materials[2]?.CardId + '-' + a.materials[3]?.CardId + '-' + a.materials[4]?.CardId;
+            const a2 = a.materials[1]?.CardId + '-' + a.materials[0]?.CardId + '-' + a.materials[2]?.CardId + '-' + a.materials[3]?.CardId + '-' + a.materials[4]?.CardId;
+            const b1 = b.materials[0]?.CardId + '-' + b.materials[1]?.CardId + '-' + b.materials[2]?.CardId + '-' + b.materials[3]?.CardId + '-' + b.materials[4]?.CardId;
+            const b2 = b.materials[1]?.CardId + '-' + b.materials[0]?.CardId + '-' + b.materials[2]?.CardId + '-' + b.materials[3]?.CardId + '-' + b.materials[4]?.CardId;
+            if (a1 === b1 || a1 === b2 || a2 === b1 || a2 === b2) {
+                return true;
+            } else {
+                return false;
+            }
+        });
         this.possibleFusions = _.orderBy(this.possibleFusions,
             [
                 x => x.results[x.results.length - 1].Attack,
                 x => x.materials.length,
                 x => x.materials.map(y => y.Attack).reduce((a, b) => a + b, 0),
+                x => x.materials[0]?.Attack,
+                x => x.materials[1]?.Attack,
+                x => x.materials[2]?.Attack,
+                x => x.materials[3]?.Attack,
+                x => x.materials[4]?.Attack,
             ],
             [
                 'desc',
+                'asc',
+                'asc',
+                'asc',
+                'asc',
+                'asc',
                 'asc',
                 'asc',
             ]

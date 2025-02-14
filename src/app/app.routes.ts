@@ -20,10 +20,6 @@ export const routes: Routes = [
         loadChildren: () => import('./fusions/fusions.routes').then(m => m.routes),
     },
     {
-        path: 'about',
-        loadChildren: () => import('./about/about.routes').then(m => m.routes),
-    },
-    {
         path: '',
         redirectTo: initialRoute,
         pathMatch: 'full'

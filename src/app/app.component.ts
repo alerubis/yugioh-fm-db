@@ -1,15 +1,15 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { RouterModule } from '@angular/router';
+import { MobileService } from './shared/mobile.service';
 
 export interface NavigationItem {
     title: string;
     icon: string;
     url: string;
-    children?: NavigationItem[];
 }
 
 @Component({
@@ -23,15 +23,11 @@ export interface NavigationItem {
     ],
     templateUrl: './app.component.html',
 })
-export class AppComponent implements OnInit, OnDestroy {
+export class AppComponent {
 
-    constructor() {
-    }
-
-    ngOnInit(): void {
-    }
-
-    ngOnDestroy(): void {
+    constructor(
+        public mobileService: MobileService,
+    ) {
     }
 
     navigation: NavigationItem[] = [
@@ -54,12 +50,7 @@ export class AppComponent implements OnInit, OnDestroy {
             title: 'Fusions',
             icon: 'combine_columns',
             url: 'fusions'
-        },
-        {
-            title: 'Deck',
-            icon: 'info',
-            url: 'about'
-        },
+        }
     ];
 
 }

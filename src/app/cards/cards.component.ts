@@ -1,8 +1,7 @@
-import { DecimalPipe } from '@angular/common';
+import { DecimalPipe, NgClass } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
-import { MatDialog } from '@angular/material/dialog';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -17,6 +16,7 @@ import _ from 'lodash';
 import { DataUtils } from '../shared/data-utils';
 import { Card, Drop, EquipInfo } from '../shared/types';
 import { CardsListComponent } from './cards-list/cards-list.component';
+import { MobileService } from '../shared/mobile.service';
 
 @Component({
     selector: 'app-cards',
@@ -35,6 +35,7 @@ import { CardsListComponent } from './cards-list/cards-list.component';
         ReactiveFormsModule,
         RouterLink,
         CardsListComponent,
+        NgClass,
     ],
     templateUrl: './cards.component.html'
 })
@@ -49,10 +50,10 @@ export class CardsComponent implements OnInit {
 
     constructor(
         private _activatedRoute: ActivatedRoute,
-        private _matDialog: MatDialog,
-        private titleService: Title,
+        private _titleService: Title,
+        public mobileService: MobileService,
     ) {
-        this.titleService.setTitle('Cards - Yu-Gi-Oh! Forbidden Memories Database');
+        this._titleService.setTitle('Cards - Yu-Gi-Oh! Forbidden Memories Database');
     }
 
     ngOnInit(): void {
@@ -60,7 +61,7 @@ export class CardsComponent implements OnInit {
             const cardId = params.get('id');
             if (cardId) {
                 this.selectedCard = DataUtils.getCardFromId(params.get('id'));
-                this.titleService.setTitle((this.selectedCard?.getFullName() || '?') + ' - Cards - Yu-Gi-Oh! Forbidden Memories Database');
+                this._titleService.setTitle((this.selectedCard?.getFullName() || '?') + ' - Cards - Yu-Gi-Oh! Forbidden Memories Database');
                 document.getElementsByClassName('mat-drawer-inner-container')[0].scrollTo(0, 0)
                 this.loading = true;
                 this.drops = [];
@@ -76,7 +77,7 @@ export class CardsComponent implements OnInit {
                 }, 0);
             } else {
                 this.selectedCard = undefined;
-                this.titleService.setTitle('Cards - Yu-Gi-Oh! Forbidden Memories Database');
+                this._titleService.setTitle('Cards - Yu-Gi-Oh! Forbidden Memories Database');
             }
         });
     }

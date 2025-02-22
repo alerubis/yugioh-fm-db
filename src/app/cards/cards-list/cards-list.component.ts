@@ -6,6 +6,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -30,6 +31,7 @@ import { Card } from '../../shared/types';
         MatMenuModule,
         MatProgressBarModule,
         MatSidenavModule,
+        MatTooltipModule,
         MatSelectModule,
         MatSortModule,
         ReactiveFormsModule,

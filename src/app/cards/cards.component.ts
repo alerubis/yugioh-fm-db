@@ -64,10 +64,10 @@ export class CardsComponent implements OnInit {
                 this._titleService.setTitle((this.selectedCard?.getFullName() || '?') + ' - Cards - Yu-Gi-Oh! Forbidden Memories Database');
                 document.getElementsByClassName('mat-drawer-inner-container')[0].scrollTo(0, 0)
                 this.loading = true;
-                this.drops = [];
-                this.opponentsDecks = [];
-                this.equips = [];
-                this.equipsInverse = [];
+                // this.drops = [];
+                // this.opponentsDecks = [];
+                // this.equips = [];
+                // this.equipsInverse = [];
                 setTimeout(() => {
                     this.drops = DataUtils.getDropsForCard(cardId);
                     this.opponentsDecks = DataUtils.getOpponentsDecksForCard(cardId);

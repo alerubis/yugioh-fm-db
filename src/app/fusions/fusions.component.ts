@@ -1,16 +1,17 @@
 import { Component } from '@angular/core';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDialog } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { Title } from '@angular/platform-browser';
 import _ from 'lodash';
+import { SearchCardDialogComponent } from '../cards/search-card-dialog/search-card-dialog.component';
 import { DataUtils } from '../shared/data-utils';
 import { Card, Fusion } from '../shared/types';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatButtonModule } from '@angular/material/button';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { SearchCardDialogComponent } from '../cards/search-card-dialog/search-card-dialog.component';
 
 export class PossibleFusion {
     materials: Card[] = [];
@@ -30,6 +31,7 @@ export class PossibleFusion {
         MatCheckboxModule,
         MatIconModule,
         MatFormFieldModule,
+        MatTooltipModule,
         MatInputModule,
         ReactiveFormsModule,
     ],

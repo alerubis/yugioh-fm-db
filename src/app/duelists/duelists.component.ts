@@ -1,4 +1,4 @@
-import { DecimalPipe } from '@angular/common';
+import { DecimalPipe, NgClass } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -17,6 +17,7 @@ import _ from 'lodash';
 import { debounceTime } from 'rxjs';
 import { DataUtils } from '../shared/data-utils';
 import { Drop, Duelist } from '../shared/types';
+import { MobileService } from '../shared/mobile.service';
 
 @Component({
     selector: 'app-duelists',
@@ -34,6 +35,7 @@ import { Drop, Duelist } from '../shared/types';
         MatSortModule,
         ReactiveFormsModule,
         RouterLink,
+        NgClass,
     ],
     templateUrl: './duelists.component.html'
 })
@@ -55,6 +57,7 @@ export class DuelistsComponent implements OnInit {
         private _activatedRoute: ActivatedRoute,
         private _matDialog: MatDialog,
         private titleService: Title,
+        public mobileService: MobileService,
     ) {
         this.titleService.setTitle('Duelists - Yu-Gi-Oh! Forbidden Memories Database');
     }
@@ -76,6 +79,7 @@ export class DuelistsComponent implements OnInit {
                 }, 0);
             } else {
                 this.selectedDuelist = undefined;
+                this.titleService.setTitle('Duelists - Yu-Gi-Oh! Forbidden Memories Database');
             }
         });
 

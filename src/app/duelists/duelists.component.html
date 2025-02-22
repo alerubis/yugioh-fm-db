@@ -5,7 +5,7 @@
         <div class="flex flex-col h-full overflow-y-auto">
 
             <!-- #region Filters -->
-            <div class="flex flex-row items-center justify-between gap-3 bg-card p-3 border-b sticky top-0 z-10">
+    <div class="fm-toolbar flex flex-row items-center justify-between gap-3 sticky top-0 z-10">
                 <mat-form-field class="dense-form-field flex-auto" appearance="outline" subscriptSizing="dynamic">
                     <mat-icon matPrefix>search</mat-icon>
                     <input matInput [formControl]="filterControl" name="search" type="text" placeholder="Search...">
@@ -63,12 +63,12 @@
 
     </mat-drawer-content>
 
-    <mat-drawer class="!w-full !rounded-none" [mode]="'over'" [position]="'end'" [opened]="!!selectedDuelist">
+    <mat-drawer class="!rounded-none" [ngClass]="mobileService.isTablet() ? '!w-full' : '!w-1/2 !shadow !border-l'" [mode]="mobileService.isTablet() ? 'over' : 'side'" [position]="'end'" [opened]="!!selectedDuelist || !mobileService.isTablet()">
         <div class="flex flex-col min-h-full">
             @if (selectedDuelist) {
 
                 <!-- #region Header -->
-                <div class="flex flex-row items-center gap-3 bg-card p-3 border-b sticky top-0 z-10">
+                <div class="fm-toolbar flex flex-row items-center gap-3 sticky top-0 z-10">
                     <a mat-icon-button [routerLink]="['/duelists/']" (click)="selectedDuelist = undefined">
                         <mat-icon>arrow_back</mat-icon>
                     </a>
@@ -84,7 +84,7 @@
                 </div>
                 <!-- #endregion -->
 
-                <div class="flex flex-col px-3 py-6 gap-6">
+                <div class="flex flex-col px-3 md:px-6 py-6 gap-6">
 
                     <div class="flex flex-col items-center justify-center gap-3">
                         <img [src]="selectedDuelist.getDuelitsSrc()" [alt]="selectedDuelist.DuelistId">

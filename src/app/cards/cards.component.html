@@ -4,7 +4,7 @@
         <app-cards-list [navigate]="true"></app-cards-list>
     </mat-drawer-content>
 
-    <mat-drawer class="!rounded-none" [ngClass]="mobileService.isMobile() ? '!w-full' : '!w-1/2 !shadow !border-l'" [mode]="mobileService.isMobile() ? 'over' : 'side'" [position]="'end'" [opened]="!!selectedCard || !mobileService.isMobile()">
+    <mat-drawer class="!rounded-none" [ngClass]="mobileService.isTablet() ? '!w-full' : '!w-1/2 !shadow !border-l'" [mode]="mobileService.isTablet() ? 'over' : 'side'" [position]="'end'" [opened]="!!selectedCard || !mobileService.isTablet()">
         <div class="flex flex-col min-h-full">
 
             @if (selectedCard) {
@@ -221,7 +221,7 @@
                             @if (loading) {
                                 <mat-progress-bar mode="indeterminate"></mat-progress-bar>
                             } @else {
-                                <div class="p-4 gap-1" [ngClass]="mobileService.isMobile() ? 'grid grid-cols-4' : 'flex flex-row flex-wrap items-center justify-center'">
+                                <div class="p-4 gap-1" [ngClass]="mobileService.isTablet() ? 'grid grid-cols-4' : 'flex flex-row flex-wrap items-center justify-center'">
                                     @for (equip of equipsInverse; track $index) {
                                         <a class="hover:scale-110 transition-all" [routerLink]="['/cards/', equip.CardId]">
                                             <img [src]="equip.card?.getCardSrc()" [alt]="equip.CardId">
@@ -249,7 +249,7 @@
                             @if (loading) {
                                 <mat-progress-bar mode="indeterminate"></mat-progress-bar>
                             } @else {
-                                <div class="p-4 gap-1" [ngClass]="mobileService.isMobile() ? 'grid grid-cols-4' : 'flex flex-row flex-wrap items-center justify-center'">
+                                <div class="p-4 gap-1" [ngClass]="mobileService.isTablet() ? 'grid grid-cols-4' : 'flex flex-row flex-wrap items-center justify-center'">
                                     @for (equip of equips; track $index) {
                                         <a class="hover:scale-110 transition-all" [routerLink]="['/cards/', equip.EquipId]">
                                             <img [src]="equip.equip?.getCardSrc()" [alt]="equip.EquipId">

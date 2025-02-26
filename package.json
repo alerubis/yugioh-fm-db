@@ -7,7 +7,6 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "deploy": "ng deploy --base-href=/yugioh-fm-db/",
     "from-detail-to-artwork": "node src/scripts/from-detail-to-artwork.js",
     "from-detail-to-card": "node src/scripts/from-detail-to-card.js"
   },
@@ -38,7 +37,6 @@
     "@types/jasmine": "~5.1.0",
     "@types/lodash": "^4.17.13",
     "@types/sharp": "^0.32.0",
-    "angular-cli-ghpages": "^2.0.3",
     "autoprefixer": "^10.4.20",
     "fs-extra": "^11.2.0",
     "jasmine-core": "~5.4.0",

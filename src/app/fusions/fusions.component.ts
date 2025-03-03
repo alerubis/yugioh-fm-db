@@ -76,6 +76,9 @@ export class FusionsComponent {
 
     randomize(): void {
         this.selectedCards = _.sampleSize(this.allCards, 5);
+        for (let i = 0; i < this.selectedCards.length; i++) {
+            this.selectedCardsIds[i].setValue(this.selectedCards[i]?.getCardIdAsString());
+        }
         this.loadPossibleFusions();
         if (this.possibleFusions.length === 0) {
             this.randomize();

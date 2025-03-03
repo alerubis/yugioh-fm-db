@@ -76,13 +76,13 @@ export class DataUtils {
 
     static getDropsForDuelist(DuelistId: number | string | null): Drop[] {
         let drops = this.getDrops().filter(x => x.DuelistId == DuelistId).filter(x => x.PoolType !== 'Deck');
-        drops = _.orderBy(drops, x => x.CardProbability, 'desc');
+        drops = _.orderBy(drops, x => x.card?.Attack, 'desc');
         return drops;
     }
 
     static getDecksForDuelist(DuelistId: number | string | null): Drop[] {
         let drops = this.getDrops().filter(x => x.DuelistId == DuelistId).filter(x => x.PoolType === 'Deck');
-        drops = _.orderBy(drops, x => x.CardProbability, 'desc');
+        drops = _.orderBy(drops, x => x.card?.Attack, 'desc');
         return drops;
     }
 

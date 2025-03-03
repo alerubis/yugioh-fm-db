@@ -12,8 +12,8 @@
             }
         </mat-form-field>
         <mat-form-field class="dense-form-field flex-auto" appearance="outline" subscriptSizing="dynamic">
-            <mat-icon matPrefix>category</mat-icon>
-            <mat-select matInput multiple [formControl]="filterByTypeControl" placeholder="Type...">
+            <mat-icon matPrefix>filter_alt</mat-icon>
+            <mat-select matInput multiple [formControl]="filterByTypeControl" placeholder="Filter...">
                 <mat-option [value]="'Equip'">Equip</mat-option>
                 <mat-option [value]="'Magic'">Magic</mat-option>
                 <mat-option [value]="'Ritual'">Ritual</mat-option>
@@ -48,6 +48,7 @@
             }
         </mat-form-field>
         <div class="flex flex-row items-center justify-end">
+            <!--
             <button mat-icon-button [matTooltip]="'Gray out unobtainable cards'" (click)="grayOutUnobtainableCards = !grayOutUnobtainableCards">
                 @if (grayOutUnobtainableCards) {
                     <mat-icon>code_off</mat-icon>
@@ -55,6 +56,7 @@
                     <mat-icon>code</mat-icon>
                 }
             </button>
+            -->
             <button mat-icon-button [matMenuTriggerFor]="menuSort">
                 @switch (sortActive) {
                     @case ('CardId') {<mat-icon class="material-symbols-outlined">123</mat-icon>}

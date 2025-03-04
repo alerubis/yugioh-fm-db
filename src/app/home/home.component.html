@@ -1,68 +1,125 @@
-<div class="flex flex-col items-center">
+<div class="flex flex-col">
 
-    <div class="flex flex-col max-w-5xl">
+    <div class="flex flex-col px-3 md:px-6 py-6 max-w-7xl mx-auto">
 
-        <img class="p-6" src="assets/images/misc/yugioh-fm-logo.png" alt="">
-
-        <div class="text-center p-6">
+        <div class="text-lg sm:text-xl md:text-4xl font-bold text-center mb-6 md:mt-6 md:mb-12">
             Yu-Gi-Oh! Forbidden Memories Database
         </div>
 
-        <div class="text-center p-6">
-            WORK IN PROGRESS
-        </div>
-
-        <div class="flex flex-col items-center gap-6 p-6 bg-gray-200">
-            <div class="text-center text-xl font-bold">
-                😱 What is this?
+        <div class="border rounded-xl shadow bg-white">
+            <div class="flex flex-row items-center justify-center gap-2 border-b px-6 py-3">
+                <mat-icon>info</mat-icon>
+                About this project
             </div>
-            <img src="assets/images/misc/yugioh-fm-cover.png" alt="">
-            <div class="flex flex-col items-center gap-3 text-center">
-                <p>"Yu-Gi-Oh! Forbidden Memories" is PlayStation game based on the Yu-Gi-Oh! manga and anime series.</p>
-                <p>This app aims to help players navigate the game by providing useful tools to search for powerful cards, check where to find them, explore duelists and their drops, and calculate fusion combinations.</p>
-            </div>
-        </div>
-
-        <div class="flex flex-col items-center gap-6 p-6">
-            <div class="text-xl text-center font-bold">
-                <a [routerLink]="['/cards']">Cards</a>
-            </div>
-            <div class="flex flex-col items-center gap-3 text-center">
-                <p>Explore the full collection of cards available in game. Find details on each card's power and how to obtain them.</p>
+            <div class="flex flex-col items-center gap-3 p-3">
+                <div class="flex flex-row items-center gap-2">
+                    <img class="w-32" src="assets/images/misc/yugioh-fm-cover.png" alt="">
+                    <img class="w-48" src="assets/images/misc/psx.jpg" alt="">
+                </div>
+                <div class="text-center">"Yu-Gi-Oh! Forbidden Memories" is PlayStation game based on the Yu-Gi-Oh! manga and anime series.</div>
+                <div class="text-center">This app aims to help players navigate the game by providing useful tools to search for powerful cards, check where to find them, explore duelists and their drops, and calculate fusion combinations.</div>
             </div>
         </div>
 
-        <div class="flex flex-col items-center gap-6 p-6 bg-gray-200">
-            <div class="text-xl text-center">
-                <a [routerLink]="['/duelists']">Duelists</a>
-            </div>
-            <div class="flex flex-col items-center gap-3 text-center">
-                <p>Learn about the duelists you'll face throughout the game, including the cards they drop and the ones they use in battle.</p>
-            </div>
+        <div class="text-lg font-bold text-center mt-12 mb-6 pb-3 border-b">
+            FEATURES
         </div>
 
-        <div class="flex flex-col items-center gap-6 p-6">
-            <div class="text-xl text-center">
-                <a [routerLink]="['/fusions']">Fusions</a>
+        <div class="flex flex-col md:flex-row gap-6">
+
+            <div class="border rounded-xl shadow bg-white w-full md:w-1/3">
+                <div class="flex flex-row items-center justify-center gap-2 border-b px-6 py-3">
+                    <mat-icon class="material-symbols-outlined">style</mat-icon>
+                    Cards
+                </div>
+                <div class="flex flex-col items-center gap-3 p-3">
+                    <div class="flex flex-row items-center gap-2">
+                        <img class="w-24" src="assets/images/cards/card/eu/001.png" alt="001">
+                        <img class="w-24" src="assets/images/cards/card/eu/613.png" alt="613">
+                        <img class="w-24" src="assets/images/cards/card/eu/713.png" alt="713">
+                    </div>
+                    <div class="text-center">
+                        Explore the full collection of cards available in game.
+                        Find details on each card and how to obtain them.
+                    </div>
+                </div>
             </div>
-            <div class="flex flex-col items-center gap-3 text-center">
-                <p>Enter the cards in your hand and discover all possible fusion combinations, from the most powerful to the most efficient.</p>
+
+            <div class="border rounded-xl shadow bg-white w-full md:w-1/3">
+                <div class="flex flex-row items-center justify-center gap-2 border-b px-6 py-3">
+                    <mat-icon class="material-symbols-outlined">people</mat-icon>
+                    Duelists
+                </div>
+                <div class="flex flex-col items-center gap-3 p-3">
+                    <div class="flex flex-row items-center gap-2">
+                        <img class="w-12" src="assets/images/duelists/1.png" alt="1">
+                        <img class="w-12" src="assets/images/duelists/2.png" alt="2">
+                        <img class="w-12" src="assets/images/duelists/3.png" alt="3">
+                        <img class="w-12" src="assets/images/duelists/17.png" alt="17">
+                        <img class="w-12" src="assets/images/duelists/29.png" alt="29">
+                    </div>
+                    <div class="text-center">
+                        Learn about the duelists you'll face throughout the game,
+                        including the cards they drop and the ones they use in battle.
+                    </div>
+                </div>
             </div>
+
+            <div class="border rounded-xl shadow bg-white w-full md:w-1/3">
+                <div class="flex flex-row items-center justify-center gap-2 border-b px-6 py-3">
+                    <mat-icon class="material-symbols-outlined">combine_columns</mat-icon>
+                    Fusions
+                </div>
+                <div class="flex flex-col items-center gap-3 p-3">
+                    <div class="flex flex-row items-center gap-2">
+                        <img class="w-20" src="assets/images/cards/card/eu/004.png" alt="4">
+                        <div>+</div>
+                        <img class="w-20" src="assets/images/cards/card/eu/016.png" alt="16">
+                        <div>=</div>
+                        <img class="w-20" src="assets/images/cards/card/eu/069.png" alt="69">
+                    </div>
+                    <div class="text-center">
+                        Enter the cards in your hand and discover all possible fusion combinations,
+                        starting from the most powerful and efficient.
+                    </div>
+                </div>
+            </div>
+
         </div>
 
-        <div class="flex flex-col items-center gap-6 p-6 bg-gray-200">
-            <div class="text-center text-xl font-bold">
-                🙏 Credits
+        <div class="text-lg font-bold text-center mt-12 mb-6 pb-3 border-b">
+            CREDITS
+        </div>
+
+        <div class="flex flex-col md:flex-row gap-6">
+
+            <div class="border rounded-xl shadow bg-white w-full md:w-2/3">
+                <div class="flex flex-row items-center justify-center gap-2 border-b px-6 py-3">
+                    <mat-icon class="material-symbols-outlined">thumb_up</mat-icon>
+                    Special thanks
+                </div>
+                <div class="flex flex-col px-3 py-6">
+                    <div class="text-center">
+                        <a href="https://github.com/duke1102">duke1102 </a> for game data.
+                    </div>
+                    <div class="text-center">
+                        <a href="https://yugipedia.com/wiki/Yugipedia">Yugipedia</a> for card images.
+                    </div>
+                </div>
             </div>
-            <div class="flex flex-col gap-3 text-center">
-                <p>This app would not have been possible without the hard work and dedication of many enthusiasts.</p>
-                <p>Over the years, many individuals have gathered data from the game and conducted valuable research, which made this project possible. Below is the list of those who contributed to this effort:</p>
-                <ul>
-                    <li>bla</li>
-                    <li>bla bla</li>
-                    <li>bla bla bla</li>
-                </ul>
+
+            <div class="border rounded-xl shadow bg-white w-full md:w-1/3">
+                <div class="flex flex-row items-center justify-center gap-2 border-b px-6 py-3">
+                    <mat-icon class="material-symbols-outlined">attribution</mat-icon>
+                    Author
+                </div>
+                <div class="flex flex-col items-center gap-3 p-3">
+                    <div class="text-center">
+                        Website made by <a href="https://github.com/alerubis">alerubis</a>.
+                    </div>
+                </div>
             </div>
+
         </div>
 
     </div>

@@ -1,6 +1,12 @@
 <mat-sidenav-container class="w-full h-full">
 
-    <mat-sidenav mode="side" opened class="!bg-slate-200 !w-80" [opened]="!mobileService.isMobile()">
+    <mat-sidenav mode="side" opened class="!bg-slate-200 !w-60 !rounded-none" [opened]="!mobileService.isMobile()">
+
+        <mat-toolbar class="flex flex-row items-center justify-between !pl-4 !pr-2 bg-primary" cdkDragHandle>
+            <div class="text-lg text-white">
+                MENU
+            </div>
+        </mat-toolbar>
 
         <div class="fm-sidenav">
             @for (item of navigation; track $index) {

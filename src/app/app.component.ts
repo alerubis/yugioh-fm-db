@@ -5,6 +5,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { RouterModule } from '@angular/router';
 import { MobileService } from './shared/mobile.service';
+import { MatToolbarModule } from '@angular/material/toolbar';
 
 export interface NavigationItem {
     title: string;
@@ -19,6 +20,7 @@ export interface NavigationItem {
         MatIconModule,
         MatSidenavModule,
         MatMenuModule,
+        MatToolbarModule,
         RouterModule,
     ],
     templateUrl: './app.component.html',

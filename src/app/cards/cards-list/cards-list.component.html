@@ -103,7 +103,7 @@
         <div class="p-4 gap-1" [ngClass]="mobileService.isMobile() ? 'grid grid-cols-5' : 'flex flex-row flex-wrap items-center justify-center'">
             @for (card of cards; track $index) {
                 <a
-                    class="cursor-pointer hover:scale-110 transition-all"
+                    class="flex flex-col items-center justify-center max-w-[140px] max-h-[212px] w-full aspect-[140/212] bg-gray-300 cursor-pointer hover:scale-110 transition-all"
                     [ngClass]="grayOutUnobtainableCards && !card.hasDrops ? 'filter grayscale' : ''"
                     [routerLink]="navigate ? ['/cards/', card.CardId] : null"
                     (click)="cardSelected.emit(card)"

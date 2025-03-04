@@ -1,7 +1,7 @@
 {
-  "name": "yugioh-fm-db",
+  "name": "Yu-Gi-Oh! Forbidden Memories Database",
   "short_name": "yugioh-fm-db",
-  "theme_color": "#1976d2",
+  "theme_color": "#005cbb",
   "background_color": "#fafafa",
   "display": "standalone",
   "scope": "./",

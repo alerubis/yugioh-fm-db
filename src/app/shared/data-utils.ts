@@ -125,4 +125,36 @@ export class DataUtils {
         return fusions;
     }
 
+    static getFusionsAsMaterial(CardId: number | string | null): Fusion[] {
+        let fusions = this.getFusions().filter(x => x.Material1 == CardId || x.Material2 == CardId);
+        fusions = _.orderBy(fusions,
+            [
+                x => x.cardResult?.Attack,
+                x => ((x.cardMaterial1?.Attack || 0) + (x.cardMaterial2?.Attack || 0)),
+            ],
+            [
+                'desc',
+                'asc',
+            ]
+        );
+        return fusions;
+    }
+
+    static getFusionsAsResult(CardId: number | string | null): Fusion[] {
+        let fusions = this.getFusions().filter(x => x.Result == CardId);
+        fusions = _.orderBy(fusions,
+            [
+                x => ((x.cardMaterial1?.Attack || 0) + (x.cardMaterial2?.Attack || 0)),
+                x => x.cardMaterial1?.Attack,
+                x => x.cardMaterial2?.Attack,
+            ],
+            [
+                'asc',
+                'asc',
+                'asc',
+            ]
+        );
+        return fusions;
+    }
+
 }

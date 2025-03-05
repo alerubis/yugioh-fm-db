@@ -14,7 +14,7 @@ import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, ParamMap, RouterLink } from '@angular/router';
 import _ from 'lodash';
 import { DataUtils } from '../shared/data-utils';
-import { Card, Drop, EquipInfo } from '../shared/types';
+import { Card, Drop, EquipInfo, Fusion } from '../shared/types';
 import { CardsListComponent } from './cards-list/cards-list.component';
 import { MobileService } from '../shared/mobile.service';
 
@@ -46,6 +46,8 @@ export class CardsComponent implements OnInit {
     opponentsDecks: Drop[] = [];
     equips: EquipInfo[] = [];
     equipsInverse: EquipInfo[] = [];
+    fusionsAsMaterial: Fusion[] = [];
+    fusionsAsResult: Fusion[] = [];
     loading: boolean = false;
 
     constructor(
@@ -73,6 +75,8 @@ export class CardsComponent implements OnInit {
                     this.opponentsDecks = DataUtils.getOpponentsDecksForCard(cardId);
                     this.equips = DataUtils.getEquipInfosForCard(cardId);
                     this.equipsInverse = DataUtils.getEquipInfosForCardInverse(cardId);
+                    this.fusionsAsMaterial = DataUtils.getFusionsAsMaterial(cardId);
+                    this.fusionsAsResult = DataUtils.getFusionsAsResult(cardId);
                     this.loading = false;
                 }, 0);
             } else {

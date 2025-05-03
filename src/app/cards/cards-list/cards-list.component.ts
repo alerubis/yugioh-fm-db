@@ -78,7 +78,10 @@ export class CardsListComponent implements OnInit {
     filterAndSortCards(): void {
         let filteredCards = this.allCards;
         if (this.filterControl && this.filterControl.value) {
-            filteredCards = filteredCards.filter(x => x.CardName.toLowerCase().includes(this.filterControl.value.toLowerCase()));
+            filteredCards = filteredCards.filter(x =>
+                x.CardName.toLowerCase().includes(this.filterControl.value.toLowerCase()) ||
+                x.CardId == this.filterControl.value
+            );
         }
         if (this.filterByTypeControl && this.filterByTypeControl.value && this.filterByTypeControl.value.length > 0) {
             filteredCards = filteredCards.filter(x => this.filterByTypeControl.value.some((y: string) => x.Type.includes(y)));

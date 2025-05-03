@@ -377,7 +377,7 @@
                             } @else {
                                 <div class="flex flex-col items-center p-4 gap-1">
                                     @for (ritual of rituals; track $index) {
-                                        <div class="flex flex-col items-center gap-1">
+                                        <div class="flex flex-col items-center justify-center gap-1">
                                             <a class="hover:scale-110 transition-all" [routerLink]="['/cards/', ritual.RitualCardId]">
                                                 <img [src]="ritual.cardRitual?.getCardSrc()" [alt]="ritual.RitualCardId">
                                             </a>

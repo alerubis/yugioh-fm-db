@@ -2,6 +2,7 @@ import { DecimalPipe, NgClass } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatDialog } from '@angular/material/dialog';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -18,6 +19,7 @@ import { debounceTime } from 'rxjs';
 import { DataUtils } from '../shared/data-utils';
 import { Drop, Duelist } from '../shared/types';
 import { MobileService } from '../shared/mobile.service';
+import { MatSelectModule } from '@angular/material/select';
 
 @Component({
     selector: 'app-duelists',
@@ -25,12 +27,14 @@ import { MobileService } from '../shared/mobile.service';
     imports: [
         DecimalPipe,
         MatButtonModule,
+        MatButtonToggleModule,
         MatExpansionModule,
         MatFormFieldModule,
         MatIconModule,
         MatInputModule,
         MatMenuModule,
         MatProgressBarModule,
+        MatSelectModule,
         MatSidenavModule,
         MatSortModule,
         ReactiveFormsModule,
@@ -48,7 +52,12 @@ export class DuelistsComponent implements OnInit {
     sortActive: string = 'DuelistId';
     sortDirection: 'asc' | 'desc' = 'asc';
 
+    filterDropsByRankControl = new FormControl();
+    sortDropsActive: string = 'card.Attack';
+    sortDropsDirection: 'asc' | 'desc' = 'desc';
+
     selectedDuelist: Duelist | undefined;
+    allDrops: Drop[] = [];
     drops: Drop[] = [];
     decks: Drop[] = [];
     loading: boolean = false;
@@ -70,10 +79,12 @@ export class DuelistsComponent implements OnInit {
                 this.titleService.setTitle((this.selectedDuelist?.Duelist || '?') + ' - Duelists - Yu-Gi-Oh! Forbidden Memories Database');
                 document.getElementsByClassName('mat-drawer-inner-container')[0].scrollTo(0, 0)
                 this.loading = true;
-                this.drops = [];
+                this.allDrops = [];
+                this.filterAndSortDrops();
                 this.decks = [];
                 setTimeout(() => {
-                    this.drops = DataUtils.getDropsForDuelist(duelistId);
+                    this.allDrops = DataUtils.getDropsForDuelist(duelistId);
+                    this.filterAndSortDrops();
                     this.decks = DataUtils.getDecksForDuelist(duelistId);
                     this.loading = false;
                 }, 0);
@@ -86,11 +97,17 @@ export class DuelistsComponent implements OnInit {
         this.filterControl.valueChanges
             .pipe(debounceTime(200))
             .subscribe(value => {
-                this.filterAndSortCards();
+                this.filterAndSortDuelists();
+            });
+
+        this.filterDropsByRankControl.valueChanges
+            .pipe(debounceTime(200))
+            .subscribe(value => {
+                this.filterAndSortDrops();
             });
     }
 
-    filterAndSortCards(): void {
+    filterAndSortDuelists(): void {
         let filteredCards = this.allDuelists;
         if (this.filterControl && this.filterControl.value) {
             filteredCards = filteredCards.filter(x => x.Duelist.toLowerCase().includes(this.filterControl.value.toLowerCase()));
@@ -112,19 +129,40 @@ export class DuelistsComponent implements OnInit {
             this.sortDirection = 'asc';
         }
         this.sortActive = sort;
-        this.filterAndSortCards();
+        this.filterAndSortDuelists();
     }
 
     handleBackdropClick(): void {
         this.selectedDuelist = undefined;
     }
 
-    sortDrops(sort: Sort): void {
-        this.drops = _.orderBy(this.drops, sort.active, sort.direction === 'asc' ? 'asc' : 'desc');
-    }
-
     sortDecks(sort: Sort): void {
         this.decks = _.orderBy(this.decks, sort.active, sort.direction === 'asc' ? 'asc' : 'desc');
+    }
+
+    handleSortDropsChange(sort: string): void {
+        if (sort === this.sortDropsActive) {
+            if (this.sortDropsDirection === 'asc') {
+                this.sortDropsDirection = 'desc';
+            } else {
+                this.sortDropsDirection = 'asc';
+            }
+        } else {
+            this.sortDropsDirection = 'desc';
+        }
+        this.sortDropsActive = sort;
+        this.filterAndSortDrops();
+    }
+
+    filterAndSortDrops(): void {
+        let filteredDrops = this.allDrops;
+        if (this.filterDropsByRankControl && this.filterDropsByRankControl.value && this.filterDropsByRankControl.value.length > 0) {
+            filteredDrops = filteredDrops.filter(x => this.filterDropsByRankControl.value.includes(x.PoolType));
+        }
+        if (this.sortDropsActive) {
+            filteredDrops = _.orderBy(filteredDrops, this.sortDropsActive, this.sortDropsDirection === 'asc' ? 'asc' : 'desc');
+        }
+        this.drops = filteredDrops;
     }
 
 }

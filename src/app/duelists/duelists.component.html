@@ -5,7 +5,7 @@
         <div class="flex flex-col h-full overflow-y-auto">
 
             <!-- #region Filters -->
-    <div class="fm-toolbar flex flex-row items-center justify-between gap-3 sticky top-0 z-10">
+            <div class="fm-toolbar flex flex-row items-center justify-between gap-3 sticky top-0 z-10">
                 <mat-form-field class="dense-form-field flex-auto" appearance="outline" subscriptSizing="dynamic">
                     <mat-icon matPrefix>search</mat-icon>
                     <input matInput [formControl]="filterControl" name="search" type="text" placeholder="Search...">
@@ -106,33 +106,102 @@
                         @if (loading) {
                             <mat-progress-bar mode="indeterminate"></mat-progress-bar>
                         } @else {
-                            <table class="fm-table" matSort [matSortActive]="'card.Attack'" [matSortDirection]="'desc'" [matSortStart]="'desc'" [matSortDisableClear]="true" (matSortChange)="sortDrops($event)">
-                                <thead>
-                                    <tr>
-                                        <th mat-sort-header="card.Attack" class="text-left">Card</th>
-                                        <th mat-sort-header="PoolType" class="text-left">Rank</th>
-                                        <th mat-sort-header="CardProbability" arrowPosition="before" class="text-right">%</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @for (drop of drops; track $index) {
-                                        <tr>
-                                            <td class="text-left">
-                                                <a class="flex flex-row items-center gap-1" [routerLink]="['/cards/', drop.CardId]">
-                                                    <img [src]="drop.card?.getCardSrc()" [alt]="drop.CardId" class="h-16">
-                                                    <div class="flex flex-col">
-                                                        <div>{{ drop.card?.CardName }}</div>
-                                                        <div class="text-sm">
-                                                            @if (!drop.card?.Attribute) {
-                                                                {{ drop.card?.Type }}
-                                                            } @else {
-                                                                {{ drop.card?.Attack }} / {{ drop.card?.Defense }}
+                            <div class="fm-toolbar flex flex-row items-center justify-between gap-3">
+                                <mat-form-field class="dense-form-field flex-auto" appearance="outline" subscriptSizing="dynamic">
+                                    <mat-icon matPrefix>filter_alt</mat-icon>
+                                    <mat-select matInput multiple [formControl]="filterDropsByRankControl" placeholder="Filter...">
+                                        <mat-select-trigger>
+                                            <div class="flex flex-row">
+                                                @for (poolType of filterDropsByRankControl.value; track $index; let last = $last) {
+                                                    <div>
+                                                        @switch (poolType) {
+                                                            @case ('SAPow') {
+                                                                <div class="flex flex-row items-center gap-1">
+                                                                    <div>S/A</div>
+                                                                    <div class="bg-red-500 text-white rounded px-1 py-0.5 text-xs">POW</div>
+                                                                </div>
                                                             }
-                                                        </div>
+                                                            @case ('SATec') {
+                                                                <div class="flex flex-row items-center gap-1">
+                                                                    <div>S/A</div>
+                                                                    <div class="bg-blue-500 text-white rounded px-1 py-0.5 text-xs">TEC</div>
+                                                                </div>
+                                                            }
+                                                            @case ('BCD') {
+                                                                <div class="flex flex-row items-center gap-1">
+                                                                    <div>B/C/D</div>
+                                                                </div>
+                                                            }
+                                                            @default {
+                                                                {{ poolType }}
+                                                            }
+                                                        }
                                                     </div>
-                                                </a>
-                                            </td>
-                                            <td class="text-left">
+                                                    @if (!last) {
+                                                        <div class="ml-1 mr-2">,</div>
+                                                    }
+                                                }
+                                            </div>
+                                        </mat-select-trigger>
+                                        <mat-option [value]="'SAPow'">
+                                            <div class="flex flex-row items-center gap-1">
+                                                <div>S/A</div>
+                                                <div class="bg-red-500 text-white rounded px-1 py-0.5 text-xs">POW</div>
+                                            </div>
+                                        </mat-option>
+                                        <mat-option [value]="'SATec'">
+                                            <div class="flex flex-row items-center gap-1">
+                                                <div>S/A</div>
+                                                <div class="bg-blue-500 text-white rounded px-1 py-0.5 text-xs">TEC</div>
+                                            </div>
+                                        </mat-option>
+                                        <mat-option [value]="'BCD'">
+                                            <div class="flex flex-row items-center gap-1">
+                                                <div>B/C/D</div>
+                                            </div>
+                                        </mat-option>
+                                    </mat-select>
+                                    @if (filterDropsByRankControl.value && filterDropsByRankControl.value.length > 0) {
+                                        <button matSuffix mat-icon-button (click)="filterDropsByRankControl.setValue([])">
+                                            <mat-icon>clear</mat-icon>
+                                        </button>
+                                    }
+                                </mat-form-field>
+                                <div class="flex flex-row items-center justify-end">
+                                    <button mat-icon-button [matMenuTriggerFor]="menuSortDrops">
+                                        @switch (sortDropsActive) {
+                                            @case ('card.Attack') {<mat-icon class="material-symbols-outlined">swords</mat-icon>}
+                                            @case ('card.Defense') {<mat-icon class="material-symbols-outlined">security</mat-icon>}
+                                            @case ('CardProbability') {<mat-icon class="material-symbols-outlined">percentage</mat-icon>}
+                                        }
+                                        <div class="absolute top-2 -right-2">
+                                            @switch (sortDropsDirection) {
+                                                @case ('asc') {<mat-icon class="material-symbols-outlined rotate-180">straight</mat-icon>}
+                                                @case ('desc') {<mat-icon class="material-symbols-outlined">straight</mat-icon>}
+                                            }
+                                        </div>
+                                    </button>
+                                    <mat-menu #menuSortDrops="matMenu">
+                                        <button mat-menu-item (click)="handleSortDropsChange('card.Attack')">
+                                            <mat-icon class="material-symbols-outlined">swords</mat-icon>
+                                            Sort by attack
+                                        </button>
+                                        <button mat-menu-item (click)="handleSortDropsChange('card.Defense')">
+                                            <mat-icon class="material-symbols-outlined">security</mat-icon>
+                                            Sort by defense
+                                        </button>
+                                        <button mat-menu-item (click)="handleSortDropsChange('CardProbability')">
+                                            <mat-icon class="material-symbols-outlined">percentage</mat-icon>
+                                            Sort by probability
+                                        </button>
+                                    </mat-menu>
+                                </div>
+                            </div>
+                            <div class="px-4 py-6 gap-x-1 gap-y-6" [ngClass]="mobileService.isTablet() ? 'grid grid-cols-3' : 'flex flex-row flex-wrap items-center justify-center'">
+                                @for (drop of drops; track $index) {
+                                    <a class="flex flex-col items-center justify-center min-w-16 hover:scale-110 transition-all" [routerLink]="['/cards/', drop.CardId]">
+                                        <div class="flex flex-row items-center gap-1 text-sm whitespace-nowrap">
+                                            <div class="bg-gray-800 text-white rounded-t pl-1">
                                                 @switch (drop.PoolType) {
                                                     @case ('SAPow') {
                                                         <div class="flex flex-row items-center gap-1">
@@ -148,19 +217,22 @@
                                                     }
                                                     @case ('BCD') {
                                                         <div class="flex flex-row items-center gap-1">
-                                                            <div>B/C/D</div>
+                                                            <div class="pr-1">B/C/D</div>
                                                         </div>
                                                     }
                                                     @default {
                                                         {{ drop.PoolType }}
                                                     }
                                                 }
-                                            </td>
-                                            <td class="text-right">{{ drop.getCardProbabilityPercentage() | number : '1.2-2' }}%</td>
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
+                                            </div>
+                                            <div class="bg-gray-800 text-white rounded-t px-1 font-bold">
+                                                {{ drop.getCardProbabilityPercentage() | number : '1.2-2' }}%
+                                            </div>
+                                        </div>
+                                        <img [src]="drop.card?.getCardSrc()" [alt]="drop.CardId">
+                                    </a>
+                                }
+                            </div>
                         }
                     </mat-expansion-panel>
                     <!-- #endregion -->
@@ -178,36 +250,18 @@
                         @if (loading) {
                             <mat-progress-bar mode="indeterminate"></mat-progress-bar>
                         } @else {
-                            <table class="fm-table" matSort [matSortActive]="'card.Attack'" [matSortDirection]="'desc'" [matSortStart]="'desc'" [matSortDisableClear]="true" (matSortChange)="sortDecks($event)">
-                                <thead>
-                                    <tr>
-                                        <th mat-sort-header="card.Attack" class="text-left">Card</th>
-                                        <th mat-sort-header="CardProbability" arrowPosition="before" class="text-right">%</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @for (deck of decks; track $index) {
-                                        <tr>
-                                            <td class="text-left">
-                                                <a class="flex flex-row items-center gap-1" [routerLink]="['/cards/', deck.CardId]">
-                                                    <img [src]="deck.card?.getCardSrc()" [alt]="deck.CardId" class="h-16">
-                                                    <div class="flex flex-col">
-                                                        <div>{{ deck.card?.CardName }}</div>
-                                                        <div class="text-sm">
-                                                            @if (!deck.card?.Attribute) {
-                                                                {{ deck.card?.Type }}
-                                                            } @else {
-                                                                {{ deck.card?.Attack }} / {{ deck.card?.Defense }}
-                                                            }
-                                                        </div>
-                                                    </div>
-                                                </a>
-                                            </td>
-                                            <td class="text-right">{{ deck.getCardProbabilityPercentage() | number : '1.2-2' }}%</td>
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
+                            <div class="px-4 py-6 gap-x-1 gap-y-6" [ngClass]="mobileService.isTablet() ? 'grid grid-cols-3' : 'flex flex-row flex-wrap items-center justify-center'">
+                                @for (deck of decks; track $index) {
+                                    <a class="flex flex-col items-center justify-center min-w-16 hover:scale-110 transition-all" [routerLink]="['/cards/', deck.CardId]">
+                                        <div class="flex flex-row items-center justify-between gap-3 text-sm">
+                                            <div class="bg-gray-800 text-white rounded-t px-1 font-bold">
+                                                {{ deck.getCardProbabilityPercentage() | number : '1.2-2' }}%
+                                            </div>
+                                        </div>
+                                        <img [src]="deck.card?.getCardSrc()" [alt]="deck.CardId">
+                                    </a>
+                                }
+                            </div>
                         }
                     </mat-expansion-panel>
                     <!-- #endregion -->

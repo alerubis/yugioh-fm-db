@@ -4,7 +4,8 @@ import dropsData from '../../assets/data/drops.json';
 import duelistsData from '../../assets/data/duelists.json';
 import equipinfoData from '../../assets/data/equipinfo.json';
 import fusionsData from '../../assets/data/fusions.json';
-import { Card, Drop, Duelist, EquipInfo, Fusion } from './types';
+import ritualsData from '../../assets/data/rituals.json';
+import { Card, Drop, Duelist, EquipInfo, Fusion, Ritual } from './types';
 
 export class DataUtils {
 
@@ -13,6 +14,7 @@ export class DataUtils {
     static dropsCache: Drop[] | undefined;
     static equipInfoCache: EquipInfo[] | undefined;
     static fusionsCache: Fusion[] | undefined;
+    static ritualsCache: Ritual[] | undefined;
 
     static getCards(): Card[] {
         if (this.cardsCache) {
@@ -155,6 +157,47 @@ export class DataUtils {
             ]
         );
         return fusions;
+    }
+
+    static getRituals(): Ritual[] {
+        if (this.ritualsCache) {
+            return this.ritualsCache;
+        }
+        const rituals: Ritual[] = ritualsData.map(x => new Ritual(x));
+        for (const ritual of rituals) {
+            ritual.cardRitual = this.getCardFromId(ritual.RitualCardId);
+            ritual.cardMaterial1 = this.getCardFromId(ritual.Material1);
+            ritual.cardMaterial2 = this.getCardFromId(ritual.Material2);
+            ritual.cardMaterial3 = this.getCardFromId(ritual.Material3);
+            ritual.cardResult = this.getCardFromId(ritual.Result);
+        }
+        this.ritualsCache = rituals;
+        return rituals;
+    }
+
+    static getRitualsForCard(CardId: number | string | null): Ritual[] {
+        let rituals = this.getRituals().filter(x =>
+            x.RitualCardId == CardId ||
+            x.Material1 == CardId ||
+            x.Material2 == CardId ||
+            x.Material3 == CardId ||
+            x.Result == CardId
+        );
+        rituals = _.orderBy(rituals,
+            [
+                x => x.cardResult?.Attack,
+                x => x.cardMaterial1?.Attack,
+                x => x.cardMaterial2?.Attack,
+                x => x.cardMaterial3?.Attack,
+            ],
+            [
+                'desc',
+                'desc',
+                'desc',
+                'desc',
+            ]
+        );
+        return rituals;
     }
 
 }

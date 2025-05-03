@@ -14,9 +14,9 @@ import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, ParamMap, RouterLink } from '@angular/router';
 import _ from 'lodash';
 import { DataUtils } from '../shared/data-utils';
-import { Card, Drop, EquipInfo, Fusion } from '../shared/types';
-import { CardsListComponent } from './cards-list/cards-list.component';
 import { MobileService } from '../shared/mobile.service';
+import { Card, Drop, EquipInfo, Fusion, Ritual } from '../shared/types';
+import { CardsListComponent } from './cards-list/cards-list.component';
 
 @Component({
     selector: 'app-cards',
@@ -48,6 +48,7 @@ export class CardsComponent implements OnInit {
     equipsInverse: EquipInfo[] = [];
     fusionsAsMaterial: Fusion[] = [];
     fusionsAsResult: Fusion[] = [];
+    rituals: Ritual[] = [];
     loading: boolean = false;
 
     constructor(
@@ -77,6 +78,7 @@ export class CardsComponent implements OnInit {
                     this.equipsInverse = DataUtils.getEquipInfosForCardInverse(cardId);
                     this.fusionsAsMaterial = DataUtils.getFusionsAsMaterial(cardId);
                     this.fusionsAsResult = DataUtils.getFusionsAsResult(cardId);
+                    this.rituals = DataUtils.getRitualsForCard(cardId);
                     this.loading = false;
                 }, 0);
             } else {

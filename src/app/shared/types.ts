@@ -209,3 +209,61 @@ export class Fusion {
     }
 
 }
+
+export class Ritual {
+
+    RitualCardId: number;
+    Material1: number;
+    Material2: number;
+    Material3: number;
+    Result: number;
+
+    private _cardRitual: Card | undefined;
+    public get cardRitual(): Card | undefined {
+        return this._cardRitual;
+    }
+    public set cardRitual(value: Card | undefined) {
+        this._cardRitual = value;
+    }
+
+    private _cardMaterial1: Card | undefined;
+    public get cardMaterial1(): Card | undefined {
+        return this._cardMaterial1;
+    }
+    public set cardMaterial1(value: Card | undefined) {
+        this._cardMaterial1 = value;
+    }
+
+    private _cardMaterial2: Card | undefined;
+    public get cardMaterial2(): Card | undefined {
+        return this._cardMaterial2;
+    }
+    public set cardMaterial2(value: Card | undefined) {
+        this._cardMaterial2 = value;
+    }
+
+    private _cardMaterial3: Card | undefined;
+    public get cardMaterial3(): Card | undefined {
+        return this._cardMaterial3;
+    }
+    public set cardMaterial3(value: Card | undefined) {
+        this._cardMaterial3 = value;
+    }
+
+    private _cardResult: Card | undefined;
+    public get cardResult(): Card | undefined {
+        return this._cardResult;
+    }
+    public set cardResult(value: Card | undefined) {
+        this._cardResult = value;
+    }
+
+    constructor(value: any) {
+        this.RitualCardId = value.RitualCardId;
+        this.Material1 = value.Material1;
+        this.Material2 = value.Material2;
+        this.Material3 = value.Material3;
+        this.Result = value.Result;
+    }
+
+}

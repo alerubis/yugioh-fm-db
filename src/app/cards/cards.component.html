@@ -360,6 +360,53 @@
 
                     }
 
+                    @if (rituals.length > 0) {
+
+                        <!-- #region Fusions to obtain this card -->
+                        <mat-expansion-panel class="fm-expansion-panel" [expanded]="true">
+                            <mat-expansion-panel-header [collapsedHeight]="'48px'" [expandedHeight]="'48px'">
+                                Rituals
+                                @if (loading) {
+                                    (...)
+                                } @else {
+                                    ({{ rituals.length }})
+                                }
+                            </mat-expansion-panel-header>
+                            @if (loading) {
+                                <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+                            } @else {
+                                <div class="flex flex-col items-center p-4 gap-1">
+                                    @for (ritual of rituals; track $index) {
+                                        <div class="flex flex-col items-center gap-1">
+                                            <a class="hover:scale-110 transition-all" [routerLink]="['/cards/', ritual.RitualCardId]">
+                                                <img [src]="ritual.cardRitual?.getCardSrc()" [alt]="ritual.RitualCardId">
+                                            </a>
+                                            <div class="flex flex-row gap-1">
+                                                <a class="hover:scale-110 transition-all" [routerLink]="['/cards/', ritual.Material1]">
+                                                    <img [src]="ritual.cardMaterial1?.getCardSrc()" [alt]="ritual.Material1">
+                                                </a>
+                                                <a class="hover:scale-110 transition-all" [routerLink]="['/cards/', ritual.Material2]">
+                                                    <img [src]="ritual.cardMaterial2?.getCardSrc()" [alt]="ritual.Material2">
+                                                </a>
+                                                <a class="hover:scale-110 transition-all" [routerLink]="['/cards/', ritual.Material3]">
+                                                    <img [src]="ritual.cardMaterial3?.getCardSrc()" [alt]="ritual.Material3">
+                                                </a>
+                                            </div>
+                                            <div class="flex flex-col items-center justify-center w-10">
+                                                <mat-icon>arrow_downward</mat-icon>
+                                            </div>
+                                            <a class="hover:scale-110 transition-all" [routerLink]="['/cards/', ritual.Result]">
+                                                <img [src]="ritual.cardResult?.getCardSrc()" [alt]="ritual.Result">
+                                            </a>
+                                        </div>
+                                    }
+                                </div>
+                            }
+                        </mat-expansion-panel>
+                        <!-- #endregion -->
+
+                    }
+
                 </div>
 
             } @else {

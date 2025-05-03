@@ -197,11 +197,11 @@
                                     </mat-menu>
                                 </div>
                             </div>
-                            <div class="px-4 py-6 gap-x-1 gap-y-6" [ngClass]="mobileService.isTablet() ? 'grid grid-cols-3' : 'flex flex-row flex-wrap items-center justify-center'">
+                            <div class="px-2 sm:px-4 py-6 gap-x-1 gap-y-6" [ngClass]="mobileService.isTablet() ? 'grid grid-cols-3' : 'flex flex-row flex-wrap items-center justify-center'">
                                 @for (drop of drops; track $index) {
                                     <a class="flex flex-col items-center justify-center min-w-16 hover:scale-110 transition-all" [routerLink]="['/cards/', drop.CardId]">
                                         <div class="flex flex-row items-center gap-1 text-sm whitespace-nowrap">
-                                            <div class="bg-gray-800 text-white rounded-t pl-1">
+                                            <div class="bg-gray-800 text-white rounded-t pl-1 text-xs">
                                                 @switch (drop.PoolType) {
                                                     @case ('SAPow') {
                                                         <div class="flex flex-row items-center gap-1">
@@ -250,7 +250,7 @@
                         @if (loading) {
                             <mat-progress-bar mode="indeterminate"></mat-progress-bar>
                         } @else {
-                            <div class="px-4 py-6 gap-x-1 gap-y-6" [ngClass]="mobileService.isTablet() ? 'grid grid-cols-3' : 'flex flex-row flex-wrap items-center justify-center'">
+                            <div class="px-2 sm:px-4 py-6 gap-x-1 gap-y-6" [ngClass]="mobileService.isTablet() ? 'grid grid-cols-3' : 'flex flex-row flex-wrap items-center justify-center'">
                                 @for (deck of decks; track $index) {
                                     <a class="flex flex-col items-center justify-center min-w-16 hover:scale-110 transition-all" [routerLink]="['/cards/', deck.CardId]">
                                         <div class="flex flex-row items-center justify-between gap-3 text-sm">

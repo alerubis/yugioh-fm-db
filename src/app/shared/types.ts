@@ -1,3 +1,5 @@
+import { LanguageService } from "./language.service";
+
 export class Card {
 
     CardId: number;
@@ -51,18 +53,18 @@ export class Card {
         return src;
     }
 
-    getCardSrc(): string {
+    getCardSrc(languageService: LanguageService): string {
         let src = '';
         if (this.CardId) {
-            src = 'assets/images/cards/card/eu/' + this.CardId.toString().padStart(3, '0') + '.png';
+            src = 'assets/images/cards/card/' + languageService.getCurrentLang() + '/' + this.CardId.toString().padStart(3, '0') + '.webp';
         }
         return src;
     }
 
-    getDetailSrc(): string {
+    getDetailSrc(languageService: LanguageService): string {
         let src = '';
         if (this.CardId) {
-            src = 'assets/images/cards/detail/eu/' + this.CardId.toString().padStart(3, '0') + '.png';
+            src = 'assets/images/cards/detail/' + languageService.getCurrentLang() + '/' + this.CardId.toString().padStart(3, '0') + '.png';
         }
         return src;
     }

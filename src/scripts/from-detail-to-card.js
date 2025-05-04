@@ -2,8 +2,8 @@ const fs = require('fs');
 const path = require('path');
 const sharp = require('sharp');
 
-const inputDir = path.join(__dirname, '../assets/images/cards/detail/eu'); // La cartella di input delle immagini
-const outputDir = path.join(__dirname, '../assets/images/cards/card/eu'); // La cartella di output
+const inputDir = path.join(__dirname, '../assets/images/cards/detail/na'); // La cartella di input delle immagini
+const outputDir = path.join(__dirname, '../assets/images/cards/card/na'); // La cartella di output
 
 // Crea la cartella di output se non esiste
 if (!fs.existsSync(outputDir)) {
@@ -24,10 +24,14 @@ const cropImages = () => {
     // Ritaglia, aggiungi trasparenza e salva le immagini
     imageFiles.forEach(file => {
       const inputFilePath = path.join(inputDir, file);
-      const outputFilePath = path.join(outputDir, file);
+      const parsed = path.parse(file);
+      const outputFileName = parsed.name + '.webp';
+      const outputFilePath = path.join(outputDir, outputFileName);
 
       sharp(inputFilePath)
-        .extract({ width: 140, height: 212, left: 2, top: 0 }) // Ritaglia l'immagine
+        // eu .extract({ width: 140, height: 212, left: 2, top: 0 }) // Ritaglia l'immagine
+        // na .extract({ width: 140, height: 212, left: 2, top: 0 }) // Ritaglia l'immagine
+        .extract({ width: 139, height: 198, left: 2, top: 4 }) // Ritaglia l'immagine
         .ensureAlpha() // Assicurati che l'immagine abbia un canale alpha
         .raw() // Ottieni i dati dell'immagine in formato raw
         .toBuffer((err, data, info) => {
@@ -109,6 +113,11 @@ const cropImages = () => {
 
           // Scrive il buffer modificato in un nuovo file
           sharp(data, { raw: { width, height, channels: channels } })
+            .webp({
+              quality: 80,
+              alphaQuality: 80,
+              lossless: false
+            })
             .toFile(outputFilePath, (err, info) => {
               if (err) {
                 console.error(`Errore nel salvataggio dell'immagine ${file}:`, err);

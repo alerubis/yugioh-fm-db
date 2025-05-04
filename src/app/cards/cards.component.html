@@ -29,10 +29,7 @@
                 <div class="flex flex-col px-3 md:px-6 py-6 gap-6">
 
                     <div class="flex flex-col items-center justify-center gap-3">
-                        <img [src]="selectedCard.getDetailSrc()" [alt]="selectedCard.CardId">
-                        <div class="text-sm text-secondary italic text-center">
-                            {{ selectedCard.Description }}
-                        </div>
+                        <img [src]="selectedCard.getDetailSrc(languageService)" [alt]="selectedCard.CardId">
                     </div>
 
                     <!-- #region Card info -->
@@ -44,7 +41,12 @@
                             <div class="flex flex-col divide-y">
                                 <div class="flex flex-row items-center justify-between gap-6 py-2">
                                     <div class="text-secondary">Type</div>
-                                    <div>{{ selectedCard.Type }}</div>
+                                    <div>
+                                        <div class="flex flex-row items-center gap-2">
+                                            <img class="w-6 h-6" [src]="'assets/images/types/' + selectedCard.Type + '.png'">
+                                            {{ selectedCard.Type }}
+                                        </div>
+                                    </div>
                                 </div>
                                 @if (selectedCard.Type !== 'Equip') {
                                     <div class="flex flex-row items-center justify-between gap-6 py-2">
@@ -224,7 +226,7 @@
                                 <div class="p-4 gap-1" [ngClass]="mobileService.isTablet() ? 'grid grid-cols-4' : 'flex flex-row flex-wrap items-center justify-center'">
                                     @for (equip of equipsInverse; track $index) {
                                         <a class="hover:scale-110 transition-all" [routerLink]="['/cards/', equip.CardId]">
-                                            <img [src]="equip.card?.getCardSrc()" [alt]="equip.CardId">
+                                            <img [src]="equip.card?.getCardSrc(languageService)" [alt]="equip.CardId">
                                         </a>
                                     }
                                 </div>
@@ -252,7 +254,7 @@
                                 <div class="p-4 gap-1" [ngClass]="mobileService.isTablet() ? 'grid grid-cols-4' : 'flex flex-row flex-wrap items-center justify-center'">
                                     @for (equip of equips; track $index) {
                                         <a class="hover:scale-110 transition-all" [routerLink]="['/cards/', equip.EquipId]">
-                                            <img [src]="equip.equip?.getCardSrc()" [alt]="equip.EquipId">
+                                            <img [src]="equip.equip?.getCardSrc(languageService)" [alt]="equip.EquipId">
                                         </a>
                                     }
                                 </div>
@@ -281,24 +283,24 @@
                                     @for (ritual of rituals; track $index) {
                                         <div class="flex flex-col items-center justify-center gap-1">
                                             <a class="hover:scale-110 transition-all" [routerLink]="['/cards/', ritual.RitualCardId]">
-                                                <img [src]="ritual.cardRitual?.getCardSrc()" [alt]="ritual.RitualCardId">
+                                                <img [src]="ritual.cardRitual?.getCardSrc(languageService)" [alt]="ritual.RitualCardId">
                                             </a>
                                             <div class="flex flex-row gap-1">
                                                 <a class="hover:scale-110 transition-all" [routerLink]="['/cards/', ritual.Material1]">
-                                                    <img [src]="ritual.cardMaterial1?.getCardSrc()" [alt]="ritual.Material1">
+                                                    <img [src]="ritual.cardMaterial1?.getCardSrc(languageService)" [alt]="ritual.Material1">
                                                 </a>
                                                 <a class="hover:scale-110 transition-all" [routerLink]="['/cards/', ritual.Material2]">
-                                                    <img [src]="ritual.cardMaterial2?.getCardSrc()" [alt]="ritual.Material2">
+                                                    <img [src]="ritual.cardMaterial2?.getCardSrc(languageService)" [alt]="ritual.Material2">
                                                 </a>
                                                 <a class="hover:scale-110 transition-all" [routerLink]="['/cards/', ritual.Material3]">
-                                                    <img [src]="ritual.cardMaterial3?.getCardSrc()" [alt]="ritual.Material3">
+                                                    <img [src]="ritual.cardMaterial3?.getCardSrc(languageService)" [alt]="ritual.Material3">
                                                 </a>
                                             </div>
                                             <div class="flex flex-col items-center justify-center w-10">
                                                 <mat-icon>arrow_downward</mat-icon>
                                             </div>
                                             <a class="hover:scale-110 transition-all" [routerLink]="['/cards/', ritual.Result]">
-                                                <img [src]="ritual.cardResult?.getCardSrc()" [alt]="ritual.Result">
+                                                <img [src]="ritual.cardResult?.getCardSrc(languageService)" [alt]="ritual.Result">
                                             </a>
                                         </div>
                                     }
@@ -327,16 +329,16 @@
                                     @for (fusion of fusionsAsResult; track $index) {
                                         <div class="flex flex-row gap-1">
                                             <a class="hover:scale-110 transition-all" [routerLink]="['/cards/', fusion.Material1]">
-                                                <img [src]="fusion.cardMaterial1?.getCardSrc()" [alt]="fusion.Material1">
+                                                <img [src]="fusion.cardMaterial1?.getCardSrc(languageService)" [alt]="fusion.Material1">
                                             </a>
                                             <a class="hover:scale-110 transition-all" [routerLink]="['/cards/', fusion.Material2]">
-                                                <img [src]="fusion.cardMaterial2?.getCardSrc()" [alt]="fusion.Material2">
+                                                <img [src]="fusion.cardMaterial2?.getCardSrc(languageService)" [alt]="fusion.Material2">
                                             </a>
                                             <div class="flex flex-col items-center justify-center w-10">
                                                 <mat-icon>arrow_forward</mat-icon>
                                             </div>
                                             <a class="hover:scale-110 transition-all" [routerLink]="['/cards/', fusion.Result]">
-                                                <img [src]="fusion.cardResult?.getCardSrc()" [alt]="fusion.Result">
+                                                <img [src]="fusion.cardResult?.getCardSrc(languageService)" [alt]="fusion.Result">
                                             </a>
                                         </div>
                                     }
@@ -376,16 +378,16 @@
                                     @for (fusion of fusionsAsMaterial; track $index) {
                                         <div class="flex flex-row gap-1">
                                             <a class="hover:scale-110 transition-all" [routerLink]="['/cards/', fusion.Material1]">
-                                                <img [src]="fusion.cardMaterial1?.getCardSrc()" [alt]="fusion.Material1">
+                                                <img [src]="fusion.cardMaterial1?.getCardSrc(languageService)" [alt]="fusion.Material1">
                                             </a>
                                             <a class="hover:scale-110 transition-all" [routerLink]="['/cards/', fusion.Material2]">
-                                                <img [src]="fusion.cardMaterial2?.getCardSrc()" [alt]="fusion.Material2">
+                                                <img [src]="fusion.cardMaterial2?.getCardSrc(languageService)" [alt]="fusion.Material2">
                                             </a>
                                             <div class="flex flex-col items-center justify-center w-10">
                                                 <mat-icon>arrow_forward</mat-icon>
                                             </div>
                                             <a class="hover:scale-110 transition-all" [routerLink]="['/cards/', fusion.Result]">
-                                                <img [src]="fusion.cardResult?.getCardSrc()" [alt]="fusion.Result">
+                                                <img [src]="fusion.cardResult?.getCardSrc(languageService)" [alt]="fusion.Result">
                                             </a>
                                         </div>
                                     }

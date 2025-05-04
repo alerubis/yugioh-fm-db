@@ -17,6 +17,7 @@ import { DataUtils } from '../shared/data-utils';
 import { MobileService } from '../shared/mobile.service';
 import { Card, Drop, EquipInfo, Fusion, Ritual } from '../shared/types';
 import { CardsListComponent } from './cards-list/cards-list.component';
+import { LanguageService } from '../shared/language.service';
 
 @Component({
     selector: 'app-cards',
@@ -55,6 +56,7 @@ export class CardsComponent implements OnInit {
         private _activatedRoute: ActivatedRoute,
         private _titleService: Title,
         public mobileService: MobileService,
+        public languageService: LanguageService,
     ) {
         this._titleService.setTitle('Cards - Yu-Gi-Oh! Forbidden Memories Database');
     }

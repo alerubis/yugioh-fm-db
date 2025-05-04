@@ -18,6 +18,7 @@ import { debounceTime } from 'rxjs';
 import { DataUtils } from '../../shared/data-utils';
 import { MobileService } from '../../shared/mobile.service';
 import { Card } from '../../shared/types';
+import { LanguageService } from '../../shared/language.service';
 
 @Component({
     selector: 'app-cards-list',
@@ -56,6 +57,7 @@ export class CardsListComponent implements OnInit {
 
     constructor(
         public mobileService: MobileService,
+        public languageService: LanguageService,
     ) {
 
     }

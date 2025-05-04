@@ -18,7 +18,7 @@
             @for (index of [0, 1, 2, 3, 4]; track $index) {
                 <a class="cursor-pointer" (click)="handleCardClick(index)">
                     @if (selectedCards[index]) {
-                        <img class="mx-auto" [src]="selectedCards[index].getCardSrc()" [alt]="selectedCards[index].CardId">
+                        <img class="mx-auto" [src]="selectedCards[index].getCardSrc(languageService)" [alt]="selectedCards[index].CardId">
                     } @else {
                         <div class="flex flex-col items-center justify-center max-w-[140px] max-h-[212px] w-full aspect-[140/212] bg-gray-300 border-2 border-gray-400 border-dashed rounded mx-auto">
                             <mat-icon>add</mat-icon>
@@ -57,11 +57,11 @@
                     @for (material of fusion.materials; track $index; let index = $index) {
                         @if (showIntermediateFusions && index >= 2) {
                             <div class="flex flex-col items-center justify-center min-w-16">
-                                <img [src]="fusion.results[index - 2].getCardSrc()" [alt]="fusion.results[index - 2].CardId">
+                                <img [src]="fusion.results[index - 2].getCardSrc(languageService)" [alt]="fusion.results[index - 2].CardId">
                             </div>
                         }
                         <div class="relative flex flex-col items-center justify-center min-w-16">
-                            <img [src]="material.getCardSrc()" [alt]="material.CardId">
+                            <img [src]="material.getCardSrc(languageService)" [alt]="material.CardId">
                             <div class="flex flex-col items-center justify-center absolute -top-4 left-0.5 w-5 h-4 z-10 bg-gray-800 text-white text-xs rounded-t">
                                 {{ index + 1 }}
                             </div>
@@ -71,7 +71,7 @@
                         <mat-icon>arrow_forward</mat-icon>
                     </div>
                     <div class="flex flex-col items-center justify-center min-w-16">
-                        <img [src]="fusion.getLastResult().getCardSrc()" [alt]="fusion.getLastResult().CardId">
+                        <img [src]="fusion.getLastResult().getCardSrc(languageService)" [alt]="fusion.getLastResult().CardId">
                     </div>
                 </div>
             }

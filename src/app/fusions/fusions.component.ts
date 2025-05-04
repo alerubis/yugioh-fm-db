@@ -12,6 +12,7 @@ import _ from 'lodash';
 import { SearchCardDialogComponent } from '../cards/search-card-dialog/search-card-dialog.component';
 import { DataUtils } from '../shared/data-utils';
 import { Card, Fusion } from '../shared/types';
+import { LanguageService } from '../shared/language.service';
 
 export class PossibleFusion {
     materials: Card[] = [];
@@ -49,6 +50,7 @@ export class FusionsComponent {
     constructor(
         private _matDialog: MatDialog,
         private titleService: Title,
+        public languageService: LanguageService,
     ) {
         this.titleService.setTitle('Fusions - Yu-Gi-Oh! Forbidden Memories Database');
         for (const formControl of this.selectedCardsIds) {

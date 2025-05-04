@@ -229,7 +229,7 @@
                                                 {{ drop.getCardProbabilityPercentage() | number : '1.2-2' }}%
                                             </div>
                                         </div>
-                                        <img [src]="drop.card?.getCardSrc()" [alt]="drop.CardId">
+                                        <img [src]="drop.card?.getCardSrc(languageService)" [alt]="drop.CardId">
                                     </a>
                                 }
                             </div>
@@ -258,7 +258,7 @@
                                                 {{ deck.getCardProbabilityPercentage() | number : '1.2-2' }}%
                                             </div>
                                         </div>
-                                        <img [src]="deck.card?.getCardSrc()" [alt]="deck.CardId">
+                                        <img [src]="deck.card?.getCardSrc(languageService)" [alt]="deck.CardId">
                                     </a>
                                 }
                             </div>

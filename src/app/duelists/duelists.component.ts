@@ -20,6 +20,7 @@ import { DataUtils } from '../shared/data-utils';
 import { Drop, Duelist } from '../shared/types';
 import { MobileService } from '../shared/mobile.service';
 import { MatSelectModule } from '@angular/material/select';
+import { LanguageService } from '../shared/language.service';
 
 @Component({
     selector: 'app-duelists',
@@ -67,6 +68,7 @@ export class DuelistsComponent implements OnInit {
         private _matDialog: MatDialog,
         private titleService: Title,
         public mobileService: MobileService,
+        public languageService: LanguageService,
     ) {
         this.titleService.setTitle('Duelists - Yu-Gi-Oh! Forbidden Memories Database');
     }

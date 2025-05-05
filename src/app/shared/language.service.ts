@@ -7,22 +7,25 @@ export class LanguageService {
     private possibleLangs: string[] = ['eu', 'na', 'fr', 'de', 'it', 'es'];
 
     constructor() {
-        this.getCurrentLangFromLocalStorage();
+        this.loadCurrentLangFromLocalStorage();
     }
 
-    private getCurrentLangFromLocalStorage(): string {
-        const lang = localStorage.getItem('currentLang');
-        if (lang && this.possibleLangs.includes(lang)) {
-            this.currentLang = lang;
-        } else {
-            this.currentLang = 'eu';
+    private loadCurrentLangFromLocalStorage(): void {
+        if (typeof window !== 'undefined' && window.localStorage) {
+            const lang = localStorage.getItem('currentLang');
+            if (lang && this.possibleLangs.includes(lang)) {
+                this.currentLang = lang;
+            } else {
+                this.currentLang = 'eu';
+            }
         }
-        return this.currentLang;
     }
 
     setCurrentLang(lang: string): void {
         this.currentLang = lang;
-        localStorage.setItem('currentLang', lang);
+        if (typeof window !== 'undefined' && window.localStorage) {
+            localStorage.setItem('currentLang', lang);
+        }
     }
 
     getCurrentLang(): string {

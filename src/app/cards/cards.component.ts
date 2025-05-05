@@ -1,5 +1,5 @@
 import { DecimalPipe, NgClass } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatExpansionModule } from '@angular/material/expansion';
@@ -8,7 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatDrawer, MatDrawerContent, MatSidenavModule } from '@angular/material/sidenav';
 import { MatSortModule, Sort } from '@angular/material/sort';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, ParamMap, RouterLink } from '@angular/router';
@@ -42,6 +42,8 @@ import { LanguageService } from '../shared/language.service';
 })
 export class CardsComponent implements OnInit {
 
+    @ViewChild(MatDrawer) drawer: MatDrawer | undefined;
+
     selectedCard: Card | undefined;
     drops: Drop[] = [];
     opponentsDecks: Drop[] = [];
@@ -67,8 +69,10 @@ export class CardsComponent implements OnInit {
             if (cardId) {
                 this.selectedCard = DataUtils.getCardFromId(params.get('id'));
                 this._titleService.setTitle((this.selectedCard?.getFullName() || '?') + ' - Cards - Yu-Gi-Oh! Forbidden Memories Database');
-                document.getElementsByClassName('mat-drawer-inner-container')[0].scrollTo(0, 0)
                 this.loading = true;
+                if (this.drawer && this.drawer._content?.nativeElement?.scrollTop) {
+                    this.drawer._content.nativeElement.scrollTop = 0;
+                }
                 // this.drops = [];
                 // this.opponentsDecks = [];
                 // this.equips = [];

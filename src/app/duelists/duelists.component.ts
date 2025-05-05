@@ -1,5 +1,5 @@
 import { DecimalPipe, NgClass } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
@@ -10,17 +10,17 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatSelectModule } from '@angular/material/select';
+import { MatDrawer, MatSidenavModule } from '@angular/material/sidenav';
 import { MatSortModule, Sort } from '@angular/material/sort';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, ParamMap, RouterLink } from '@angular/router';
 import _ from 'lodash';
 import { debounceTime } from 'rxjs';
 import { DataUtils } from '../shared/data-utils';
-import { Drop, Duelist } from '../shared/types';
-import { MobileService } from '../shared/mobile.service';
-import { MatSelectModule } from '@angular/material/select';
 import { LanguageService } from '../shared/language.service';
+import { MobileService } from '../shared/mobile.service';
+import { Drop, Duelist } from '../shared/types';
 
 @Component({
     selector: 'app-duelists',
@@ -45,6 +45,8 @@ import { LanguageService } from '../shared/language.service';
     templateUrl: './duelists.component.html'
 })
 export class DuelistsComponent implements OnInit {
+
+    @ViewChild(MatDrawer) drawer: MatDrawer | undefined;
 
     allDuelists: Duelist[] = DataUtils.getDuelists();
     duelists: Duelist[] = this.allDuelists;
@@ -79,8 +81,10 @@ export class DuelistsComponent implements OnInit {
             if (duelistId) {
                 this.selectedDuelist = DataUtils.getDuelistFromId(params.get('id'));
                 this.titleService.setTitle((this.selectedDuelist?.Duelist || '?') + ' - Duelists - Yu-Gi-Oh! Forbidden Memories Database');
-                document.getElementsByClassName('mat-drawer-inner-container')[0].scrollTo(0, 0)
                 this.loading = true;
+                if (this.drawer && this.drawer._content?.nativeElement?.scrollTop) {
+                    this.drawer._content.nativeElement.scrollTop = 0;
+                }
                 this.allDrops = [];
                 this.filterAndSortDrops();
                 this.decks = [];

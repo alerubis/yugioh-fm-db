@@ -149,7 +149,7 @@
                     [routerLink]="navigate ? ['/cards/', card.CardId] : null"
                     (click)="cardSelected.emit(card)"
                 >
-                    <img [src]="card?.getCardSrc(languageService)" [alt]="card.CardId">
+                    <img [src]="card?.getCardSrc(languageService)" [alt]="card.getFullName()">
                 </a>
             }
         </div>

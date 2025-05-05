@@ -1,32 +1,52 @@
-import { MediaMatcher } from "@angular/cdk/layout";
-import { ChangeDetectorRef, Injectable, OnDestroy } from "@angular/core";
+import { BreakpointObserver, BreakpointState } from "@angular/cdk/layout";
+import { Injectable, OnDestroy } from "@angular/core";
+import { BehaviorSubject, Subscription } from "rxjs";
 
 @Injectable({ providedIn: 'root' })
 export class MobileService implements OnDestroy {
 
-    private _mobileQuery: MediaQueryList;
-    private _mobileQueryLg: MediaQueryList;
-    private _mobileQueryListener: () => void;
+    private mobileQuery = '(max-width: 767px)';
+    private tabletQuery = '(max-width: 1023px)';
+
+    private _isMobile$ = new BehaviorSubject<boolean>(false);
+    private _isTablet$ = new BehaviorSubject<boolean>(false);
+
+    private subscriptions = new Subscription();
 
     constructor(
-        private _media: MediaMatcher,
+        private breakpointObserver: BreakpointObserver,
     ) {
-        this._mobileQuery = this._media.matchMedia('(max-width: 767px)');
-        this._mobileQueryLg = this._media.matchMedia('(max-width: 1023px)');
-        this._mobileQueryListener = () => {};
-        this._mobileQuery.addEventListener('change', this._mobileQueryListener);
+        this.subscriptions.add(
+            this.breakpointObserver.observe(this.mobileQuery).subscribe((state: BreakpointState) => {
+                this._isMobile$.next(state.matches);
+            })
+        );
+
+        this.subscriptions.add(
+            this.breakpointObserver.observe(this.tabletQuery).subscribe((state: BreakpointState) => {
+                this._isTablet$.next(state.matches);
+            })
+        );
     }
 
     ngOnDestroy(): void {
-        this._mobileQuery.removeEventListener('change', this._mobileQueryListener);
+        this.subscriptions.unsubscribe();
     }
 
     isMobile(): boolean {
-        return this._mobileQuery.matches;
+        return this._isMobile$.value;
     }
 
     isTablet(): boolean {
-        return this._mobileQueryLg.matches;
+        return this._isTablet$.value;
+    }
+
+    isMobile$() {
+        return this._isMobile$.asObservable();
+    }
+
+    isTablet$() {
+        return this._isTablet$.asObservable();
     }
 
 }

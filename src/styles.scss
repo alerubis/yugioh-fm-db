@@ -230,3 +230,21 @@ a {
     height: 96px !important;
     font-size: 96px !important;
 }
+
+.sidenav-menu > .mat-drawer-content-hidden {
+    opacity: 1 !important;
+    margin-left: 240px !important;
+
+    @media (max-width: 767px) {
+        margin-left: 0 !important;
+    }
+}
+
+.drawer-list > .mat-drawer-content-hidden {
+    opacity: 1 !important;
+    margin-right: 50% !important;
+
+    @media (max-width: 767px) {
+        margin-right: 0 !important;
+    }
+}

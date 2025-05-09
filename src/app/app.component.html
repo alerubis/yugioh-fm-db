@@ -1,8 +1,7 @@
-<mat-sidenav-container class="w-full h-full">
+<mat-sidenav-container class="w-full h-full sidenav-menu">
 
-    <mat-sidenav mode="side" opened class="!bg-slate-200 !w-60 !rounded-none" [opened]="!mobileService.isMobile()">
-
-        <mat-toolbar class="flex flex-row items-center justify-between !pl-4 !pr-2 bg-primary" cdkDragHandle>
+    <mat-sidenav mode="side" class="!bg-slate-200 !w-60 !rounded-none !hidden md:!block" [opened]="!mobileService.isMobile()">
+        <mat-toolbar class="flex flex-row items-center justify-between !px-4 bg-primary">
             <div class="text-lg text-white">
                 MENU
             </div>
@@ -20,7 +19,6 @@
                 </a>
             }
         </div>
-
     </mat-sidenav>
 
     <mat-sidenav-content>
@@ -31,22 +29,20 @@
                 <router-outlet></router-outlet>
             </div>
 
-            @if (mobileService.isMobile()) {
-                <div class="fm-nav">
-                    @for (item of navigation; track $index) {
-                        <a class="fm-nav-item"
-                            [routerLink]="item.url"
-                            [routerLinkActive]="['active']">
-                            <div class="fm-nav-item-icon-container">
-                                <mat-icon class="material-symbols-outlined">{{ item.icon }}</mat-icon>
-                            </div>
-                            <div class="fm-nav-item-title">
-                                {{ item.title }}
-                            </div>
-                        </a>
-                    }
-                </div>
-            }
+            <div class="fm-nav block md:hidden">
+                @for (item of navigation; track $index) {
+                    <a class="fm-nav-item"
+                        [routerLink]="item.url"
+                        [routerLinkActive]="['active']">
+                        <div class="fm-nav-item-icon-container">
+                            <mat-icon class="material-symbols-outlined">{{ item.icon }}</mat-icon>
+                        </div>
+                        <div class="fm-nav-item-title">
+                            {{ item.title }}
+                        </div>
+                    </a>
+                }
+            </div>
 
         </div>
 

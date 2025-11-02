@@ -12,9 +12,8 @@ A modern web app for exploring **Yu-Gi-Oh! Forbidden Memories** data — cards, 
 
 ## 📸 Screenshots
 
-<img width="297" height="626" alt="cards" src="https://github.com/user-attachments/assets/ba7c34d0-a8e6-4ccf-a97c-1b253fcf006c" />
-<img width="297" height="626" alt="card" src="https://github.com/user-attachments/assets/d7f2adbf-cdaf-41de-8107-d18ad3599685" />
-<img width="297" height="627" alt="fusions" src="https://github.com/user-attachments/assets/fa438ae8-0b5b-4186-bb66-c06cb6a1266a" />
+![cards](https://github.com/user-attachments/assets/746f1e13-82bd-4f6c-831a-87b29005b25e)
+![card001](https://github.com/user-attachments/assets/ece10054-7a09-40e1-a3c3-5c8a736e4399)
 
 ---
 
@@ -54,7 +53,7 @@ This web app aims to help players navigate the game by providing a set of tools 
 Clone the repository and start a local development server:
 
 ```bash
-git clone https://github.com/<your-username>/yugioh-fm-db.git
+git clone https://github.com/alerubis/yugioh-fm-db.git
 cd yugioh-fm-db
 npm install
 ng serve
